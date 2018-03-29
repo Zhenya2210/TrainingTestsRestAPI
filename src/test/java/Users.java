@@ -81,9 +81,9 @@ public class Users {
         String json = given()
                 .accept(ContentType.JSON)
                 .when()
-                .get("/users/" + parameterRequest)
+                    .get("/users/" + parameterRequest)
                 .thenReturn()
-                .asString();
+                    .asString();
 
         JsonPath jsonPathLat = new JsonPath(json);
         double lat = jsonPathLat.getDouble("address.geo.lat");
@@ -100,9 +100,9 @@ public class Users {
         String json = given()
                 .accept(ContentType.JSON)
                 .when()
-                .get("/users/" + parameterRequest)
+                    .get("/users/" + parameterRequest)
                 .thenReturn()
-                .asString();
+                    .asString();
 
         JsonPath jsonPathLat = new JsonPath(json);
         double lng = jsonPathLat.getDouble("address.geo.lng");
