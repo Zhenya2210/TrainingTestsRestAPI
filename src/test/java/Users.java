@@ -26,11 +26,11 @@ public class Users {
 
     @ParameterizedTest
     @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
-    public void checkGetUsers(String id){
+    public void checkGetUsersEmail(String parameterRequest){
         given()
                 .accept(ContentType.JSON)
                 .when()
-                    .get("/users/" + id)
+                    .get("/users/" + parameterRequest)
                 .then()
                     .assertThat()
                     .statusCode(HttpStatus.SC_OK);
@@ -38,13 +38,13 @@ public class Users {
         String json = given()
                 .accept(ContentType.JSON)
                 .when()
-                    .get("/users/" + id)
+                    .get("/users/" + parameterRequest)
                 .thenReturn()
                     .asString();
 
         JsonPath jsonPath = new JsonPath(json);
         String email = jsonPath.getString("email");
-        assertNotNull(email);
+
         Pattern pattern = Pattern.compile("^((\\w|[-+])+(\\.[\\w-]+)*@[\\w-]+((\\.[\\d\\p{Alpha}]+)*(\\.\\p{Alpha}{2,})*)*)$");
         Matcher matcher = pattern.matcher(email);
         String validity = "";
@@ -52,8 +52,27 @@ public class Users {
             validity = email.substring(matcher.start(), matcher.end());
         }
 
+        assertNotNull(email);
         assertSame(email, validity); //check e-mail
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    public void checkGetUsersID(String parameterRequest){
+
+        String json = given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/users/" + parameterRequest)
+                .thenReturn()
+                .asString();
+
+        JsonPath jsonPath = new JsonPath(json);
+        int id = jsonPath.getInt("id");
+
+        assertNotNull(id);
+        assertEquals(Integer.parseInt(parameterRequest), id); //check id
 
     }
 }
