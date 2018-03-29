@@ -11,9 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Users {
@@ -41,7 +39,7 @@ public class Users {
                     .get("/users/" + parameterRequest)
                 .thenReturn()
                     .asString();
-
+        System.out.println(json);
         JsonPath jsonPath = new JsonPath(json);
         String email = jsonPath.getString("email");
 
@@ -53,7 +51,7 @@ public class Users {
         }
 
         assertNotNull(email);
-        assertSame(email, validity); //check e-mail
+        assertSame(email, validity, "E-mail is not correct"); //check e-mail
 
     }
 
@@ -64,15 +62,53 @@ public class Users {
         String json = given()
                 .accept(ContentType.JSON)
                 .when()
-                .get("/users/" + parameterRequest)
+                    .get("/users/" + parameterRequest)
                 .thenReturn()
-                .asString();
+                    .asString();
 
         JsonPath jsonPath = new JsonPath(json);
         int id = jsonPath.getInt("id");
 
         assertNotNull(id);
-        assertEquals(Integer.parseInt(parameterRequest), id); //check id
+        assertEquals(Integer.parseInt(parameterRequest), id, "id не совпадает с запросом"); //check id
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    public void checkGetUsersLat(String parameterRequest){
+
+        String json = given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/users/" + parameterRequest)
+                .thenReturn()
+                .asString();
+
+        JsonPath jsonPathLat = new JsonPath(json);
+        double lat = jsonPathLat.getDouble("address.geo.lat");
+
+        assertNotNull(lat);
+
+        assertTrue(lat <= 90.0 && lat >= -90.0, "Широта в недопустимых пределах");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    public void checkGetUsersLng(String parameterRequest){
+
+        String json = given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/users/" + parameterRequest)
+                .thenReturn()
+                .asString();
+
+        JsonPath jsonPathLat = new JsonPath(json);
+        double lng = jsonPathLat.getDouble("address.geo.lng");
+
+        assertNotNull(lng);
+
+        assertTrue(lng <= 180.0 && lng >= -180.0, "Долгота в недопустимых пределах");
     }
 }
