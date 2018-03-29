@@ -32,13 +32,13 @@ public class TestingTraining {
             String s = given()
                     .accept(ContentType.JSON)
                     .when()
-                        .get("/posts/2")
+                        .get("/users")
                     .thenReturn()
                         .asString();
-
-        JsonPath json = new JsonPath(s);
-        int userId = json.getInt("userId");
-        assertEquals(1, userId);
+        System.out.println(s);
+//        JsonPath json = new JsonPath(s);
+//        int userId = json.getInt("userId");
+//        assertEquals(1, userId);
 
 
 
