@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import static org.hamcrest.Matchers.equalTo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,15 +24,14 @@ public class Users {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
-    public void checkGetUsersStatusCodeSuccessful(String parameterRequest) {
-        given()
-                .accept(ContentType.JSON)
-                .when()
-                    .get("/users/")
-                .then()
-                    .assertThat()
-                    .statusCode(HttpStatus.SC_OK);
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    public void checkGetUsersStatusCodeSuccessful(int parameterRequest) {
+        given().
+                expect().
+                statusCode(HttpStatus.SC_OK).
+                body("id", equalTo(parameterRequest)).
+            when().
+                get("/users/" + parameterRequest);
     }
 
     @ParameterizedTest
