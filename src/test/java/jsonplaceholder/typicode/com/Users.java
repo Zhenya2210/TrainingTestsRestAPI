@@ -25,6 +25,7 @@ public class Users {
     public void setUP(){
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
 
+
     }
 
     @ParameterizedTest
@@ -68,7 +69,6 @@ public class Users {
             validity = email.substring(matcher.start(), matcher.end());
         }
 
-        assertNotNull(email);
         assertSame(email, validity, "E-mail is not correct"); //check e-mail
 
     }
