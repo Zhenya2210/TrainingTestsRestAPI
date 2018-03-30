@@ -3,10 +3,8 @@ package jsonplaceholder.typicode.com;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
-import jsonplaceholder.typicode.com.JsonResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,14 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Users {
 
     @BeforeAll
-    public void setUP(){
+    public static void setUP(){
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
 
 
