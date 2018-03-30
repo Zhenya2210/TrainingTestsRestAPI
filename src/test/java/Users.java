@@ -24,23 +24,34 @@ public class Users {
 
     @ParameterizedTest
     @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
-    public void checkGetUsersEmail(String parameterRequest){
+    public void checkGetUsersStatusCodeSuccessful(String parameterRequest) {
+        given()
+                .accept(ContentType.JSON)
+                .when()
+                    .get("/users/")
+                .then()
+                    .assertThat()
+                    .statusCode(HttpStatus.SC_OK);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"11", "0", "-1", "4.5", "5.0"})
+    public void checkGetUsersStatusCodeNotFound(String parameterRequest) {
         given()
                 .accept(ContentType.JSON)
                 .when()
                     .get("/users/" + parameterRequest)
                 .then()
                     .assertThat()
-                    .statusCode(HttpStatus.SC_OK);
+                    .statusCode(HttpStatus.SC_NOT_FOUND);
+    }
 
-        String json = given()
-                .accept(ContentType.JSON)
-                .when()
-                    .get("/users/" + parameterRequest)
-                .thenReturn()
-                    .asString();
-        System.out.println(json);
-        JsonPath jsonPath = new JsonPath(json);
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    public void checkGetUsersEmail(String parameterRequest){
+
+        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
+
         String email = jsonPath.getString("email");
 
         Pattern pattern = Pattern.compile("^((\\w|[-+])+(\\.[\\w-]+)*@[\\w-]+((\\.[\\d\\p{Alpha}]+)*(\\.\\p{Alpha}{2,})*)*)$");
@@ -59,17 +70,10 @@ public class Users {
     @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
     public void checkGetUsersID(String parameterRequest){
 
-        String json = given()
-                .accept(ContentType.JSON)
-                .when()
-                    .get("/users/" + parameterRequest)
-                .thenReturn()
-                    .asString();
+        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
 
-        JsonPath jsonPath = new JsonPath(json);
         int id = jsonPath.getInt("id");
 
-        assertNotNull(id);
         assertEquals(Integer.parseInt(parameterRequest), id, "id не совпадает с запросом"); //check id
 
     }
@@ -78,17 +82,9 @@ public class Users {
     @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
     public void checkGetUsersLat(String parameterRequest){
 
-        String json = given()
-                .accept(ContentType.JSON)
-                .when()
-                    .get("/users/" + parameterRequest)
-                .thenReturn()
-                    .asString();
+        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
 
-        JsonPath jsonPathLat = new JsonPath(json);
-        double lat = jsonPathLat.getDouble("address.geo.lat");
-
-        assertNotNull(lat);
+        double lat = jsonPath.getDouble("address.geo.lat");
 
         assertTrue(lat <= 90.0 && lat >= -90.0, "Широта в недопустимых пределах");
     }
@@ -97,17 +93,9 @@ public class Users {
     @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
     public void checkGetUsersLng(String parameterRequest){
 
-        String json = given()
-                .accept(ContentType.JSON)
-                .when()
-                    .get("/users/" + parameterRequest)
-                .thenReturn()
-                    .asString();
+        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
 
-        JsonPath jsonPathLat = new JsonPath(json);
-        double lng = jsonPathLat.getDouble("address.geo.lng");
-
-        assertNotNull(lng);
+        double lng = jsonPath.getDouble("address.geo.lng");
 
         assertTrue(lng <= 180.0 && lng >= -180.0, "Долгота в недопустимых пределах");
     }
