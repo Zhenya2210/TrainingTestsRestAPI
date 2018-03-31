@@ -7,7 +7,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchCountry {
@@ -20,7 +24,21 @@ public class SearchCountry {
 //    }
 
     @ParameterizedTest
-    @ValueSource(strings = {"un"})
+    @ValueSource(strings = {"un", "UN", "zlqx", ""})
+    public void checkStatusSC_OK(String searchParameter){
+
+        given().
+                pathParam("text", searchParameter).
+                when().
+                get(baseURI).
+                then().
+                assertThat().
+                statusCode(HttpStatus.SC_OK).
+                contentType(ContentType.JSON);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"un", "RU", ""})
     public void searchCountry(String searchParameter){
 
         String json = given().
@@ -42,16 +60,32 @@ public class SearchCountry {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"un"})
-    public void checkStatusSC_OK(String searchParameter){
+    @ValueSource(strings = {"un", "RU", ""})
+    public void checkValueOfMessage(String searchParameter){
 
-        given().
-                pathParam("text", searchParameter).
-                when().
-                    get(baseURI).
-                then().
-                    assertThat().
-                    statusCode(HttpStatus.SC_OK).
-                    contentType(ContentType.JSON);
+        String json = given().
+                        accept(ContentType.JSON).
+                            pathParam("text", searchParameter).
+                        when().
+                            get(baseURI).
+                        thenReturn().
+                            asString();
+
+        JsonPath jsonPath = new JsonPath(json);
+        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+
+        String message = jsonPath.getString("RestResponse.messages");
+
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(message);
+        int valueOfMessage = 0;
+
+        while (matcher.find()){
+            valueOfMessage = Integer.parseInt(message.substring(matcher.start(), matcher.end()));
+        }
+
+        assertEquals(countOfFields, valueOfMessage);
     }
+
+
 }
