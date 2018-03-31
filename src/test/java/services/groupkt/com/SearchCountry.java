@@ -3,10 +3,13 @@ package services.groupkt.com;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,29 +31,22 @@ public class SearchCountry {
     public void checkStatusSC_OK(String searchParameter){
 
         given().
-                pathParam("text", searchParameter).
+                    pathParam("text", searchParameter).
                 when().
-                get(baseURI).
+                    get(baseURI).
                 then().
-                assertThat().
-                statusCode(HttpStatus.SC_OK).
-                contentType(ContentType.JSON);
+                    assertThat().
+                    statusCode(HttpStatus.SC_OK).
+                    contentType(ContentType.JSON);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
     public void searchCountry(String searchParameter){
 
-        String json = given().
-                    accept(ContentType.JSON).
-                    pathParam("text", searchParameter).
-                    when().
-                        get(baseURI).
-                    thenReturn().
-                        asString();
-
-        JsonPath jsonPath = new JsonPath(json);
+        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
         int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+
         for (int i = 0; i < countOfFields; i++){
             assertTrue((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
             || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
@@ -63,15 +59,8 @@ public class SearchCountry {
     @ValueSource(strings = {"un", "RU", ""})
     public void checkValueOfMessage(String searchParameter){
 
-        String json = given().
-                        accept(ContentType.JSON).
-                            pathParam("text", searchParameter).
-                        when().
-                            get(baseURI).
-                        thenReturn().
-                            asString();
+        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
 
-        JsonPath jsonPath = new JsonPath(json);
         int countOfFields = jsonPath.getInt("RestResponse.result.size()");
 
         String message = jsonPath.getString("RestResponse.messages");
@@ -87,5 +76,35 @@ public class SearchCountry {
         assertEquals(countOfFields, valueOfMessage);
     }
 
+    @DisplayName("Checking the search result for duplicates")
+    @ParameterizedTest
+    @ValueSource(strings = {"un", "ru"})
+    public void checkDublicateOfSearchResult(String searchParameter){
+
+        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
+
+        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+
+        HashMap<String, Integer> map = new HashMap<>();
+        String nameOfCountry;
+
+        for (int i = 0; i < countOfFields; i++){
+            nameOfCountry = jsonPath.getString("RestResponse.result[" + i + "].name");
+            if (!map.containsKey(nameOfCountry)){
+                map.put(nameOfCountry, 1);
+            }
+            else
+            {
+                map.put(nameOfCountry, map.get(nameOfCountry) + 1);
+            }
+        }
+
+        for(Map.Entry<String, Integer> pair: map.entrySet()){
+            int value = pair.getValue();
+            assertEquals(1, value);
+        }
+
+
+    }
 
 }
