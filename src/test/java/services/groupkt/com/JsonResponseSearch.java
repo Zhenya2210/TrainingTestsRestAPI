@@ -9,6 +9,19 @@ public class JsonResponseSearch {
 
     private JsonResponseSearch(){}
 
+    public static JsonPath jsonPathSearch(String allCountries){
+        String json = given().
+                accept(ContentType.JSON).
+                when().
+                    get(allCountries).
+                thenReturn().
+                    asString();
+
+        JsonPath jsonPath = new JsonPath(json);
+
+        return jsonPath;
+    }
+
     public static JsonPath jsonPathSearch(String baseURI, String searchParameter){
         String json = given().
                 accept(ContentType.JSON).

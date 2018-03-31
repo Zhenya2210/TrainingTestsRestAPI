@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -20,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SearchCountry {
 
     String baseURI = "http://services.groupkt.com/country/search?text={text}";
+    String allCountries = "http://services.groupkt.com/country/get/all";
 
 //    @BeforeAll
 //    public void setUP() {
@@ -90,21 +90,41 @@ public class SearchCountry {
 
         for (int i = 0; i < countOfFields; i++){
             nameOfCountry = jsonPath.getString("RestResponse.result[" + i + "].name");
-            if (!map.containsKey(nameOfCountry)){
-                map.put(nameOfCountry, 1);
-            }
-            else
-            {
-                map.put(nameOfCountry, map.get(nameOfCountry) + 1);
-            }
+                if (!map.containsKey(nameOfCountry)){
+                    map.put(nameOfCountry, 1);
+                    }
+                else
+                    {
+                    map.put(nameOfCountry, map.get(nameOfCountry) + 1);
+                    }
         }
 
         for(Map.Entry<String, Integer> pair: map.entrySet()){
             int value = pair.getValue();
             assertEquals(1, value);
         }
+    }
 
+    @DisplayName("Check for No Losses")
+    @ParameterizedTest
+    @ValueSource(strings = {"un", "RU", ""})
+    public void checkSearchCountry(String searchParameter){
 
+        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
+        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+
+        jsonPath = JsonResponseSearch.jsonPathSearch(allCountries);
+        int countOfFieldsAllCountries = jsonPath.getInt("RestResponse.result.size()");
+        int counter = 0;
+        for(int i = 0; i < countOfFieldsAllCountries; i++){
+                if((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
+                        || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
+                        || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase())){
+                    counter++;
+                }
+        }
+
+        assertEquals(countOfFields, counter);
     }
 
 }
