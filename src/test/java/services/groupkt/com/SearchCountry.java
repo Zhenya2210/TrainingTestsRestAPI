@@ -5,12 +5,14 @@ import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,13 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchCountry {
 
-    String baseURI = "http://services.groupkt.com/country/search?text={text}";
-    String allCountries = "http://services.groupkt.com/country/get/all";
-
-//    @BeforeAll
-//    public void setUP() {
-//        RestAssured.baseURI = "http://services.groupkt.com/country";
-//    }
+    private String baseURI = "http://services.groupkt.com/country/search?text={text}";
+    private String allCountries = "http://services.groupkt.com/country/get/all";
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "UN", "zlqx", ""})
@@ -105,7 +102,7 @@ public class SearchCountry {
         }
     }
 
-    @DisplayName("Check for No Losses")
+    @DisplayName("Loss check")
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
     public void checkSearchCountry(String searchParameter){
@@ -123,8 +120,19 @@ public class SearchCountry {
                     counter++;
                 }
         }
-
         assertEquals(countOfFields, counter);
     }
 
+    @ParameterizedTest
+    @MethodSource("valueForMethodSource")
+    public void test(String searchParameter){
+        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
+        String message = jsonPath.getString("RestResponse.messages");
+
+        assertEquals("[No matching country found for requested code [" + searchParameter +"].]", message);
+    }
+
+    public static Stream<String> valueForMethodSource(){
+        return Stream.of("8g8", "kc7");
+    }
 }

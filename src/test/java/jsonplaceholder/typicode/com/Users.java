@@ -6,11 +6,13 @@ import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,8 +22,6 @@ public class Users {
     @BeforeAll
     public static void setUP(){
         RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
-
-
     }
 
     @ParameterizedTest
@@ -39,7 +39,7 @@ public class Users {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"11", "0", "-1", "4.5", "5.0"})
+    @ValueSource(strings = {"11", "0"})
     public void checkGetUsersStatusCodeNotFound(String parameterRequest) {
         given().
                 when().
@@ -51,7 +51,7 @@ public class Users {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    @MethodSource("valueForMethodSource")
     public void checkGetUsersEmail(String parameterRequest){
 
         JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
@@ -70,7 +70,7 @@ public class Users {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    @MethodSource("valueForMethodSource")
     public void checkGetUsersID(String parameterRequest){
 
         JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
@@ -82,7 +82,7 @@ public class Users {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    @MethodSource("valueForMethodSource")
     public void checkGetUsersLat(String parameterRequest){
 
         JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
@@ -93,7 +93,7 @@ public class Users {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+    @MethodSource("valueForMethodSource")
     public void checkGetUsersLng(String parameterRequest){
 
         JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
@@ -102,5 +102,10 @@ public class Users {
 
         assertTrue(lng <= 180.0 && lng >= -180.0, "Долгота в недопустимых пределах");
 
+
+    }
+
+    public static Stream<String> valueForMethodSource(){
+        return ToolsEVG.userIDs();
     }
 }
