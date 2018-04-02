@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +24,7 @@ public class SearchCountry {
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "UN", "zlqx", ""})
-    public void checkStatusSC_OK(String searchParameter){
+    public void searchStatusSC_OK(String searchParameter){
 
         given().
                     pathParam("text", searchParameter).
@@ -41,10 +40,10 @@ public class SearchCountry {
     @ValueSource(strings = {"un", "RU", ""})
     public void searchCountry(String searchParameter){
 
-        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
-        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+        JsonPath jsonPath = EVGHelper.jsonPathSearch(baseURI, searchParameter);
+        int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
-        for (int i = 0; i < countOfFields; i++){
+        for (int i = 0; i < quantityOfObjects; i++){
             assertTrue((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
             || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
             || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase()));
@@ -54,11 +53,11 @@ public class SearchCountry {
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
-    public void checkValueOfMessage(String searchParameter){
+    public void valueOfMessage(String searchParameter){
 
-        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
+        JsonPath jsonPath = EVGHelper.jsonPathSearch(baseURI, searchParameter);
 
-        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+        int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
         String message = jsonPath.getString("RestResponse.messages");
 
@@ -70,22 +69,22 @@ public class SearchCountry {
             valueOfMessage = Integer.parseInt(message.substring(matcher.start(), matcher.end()));
         }
 
-        assertEquals(countOfFields, valueOfMessage);
+        assertEquals(quantityOfObjects, valueOfMessage);
     }
 
     @DisplayName("Checking the search result for duplicates")
     @ParameterizedTest
     @ValueSource(strings = {"un", "ru"})
-    public void checkDublicateOfSearchResult(String searchParameter){
+    public void dublicateOfSearchResult(String searchParameter){
 
-        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
+        JsonPath jsonPath = EVGHelper.jsonPathSearch(baseURI, searchParameter);
 
-        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+        int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
         HashMap<String, Integer> map = new HashMap<>();
         String nameOfCountry;
 
-        for (int i = 0; i < countOfFields; i++){
+        for (int i = 0; i < quantityOfObjects; i++){
             nameOfCountry = jsonPath.getString("RestResponse.result[" + i + "].name");
                 if (!map.containsKey(nameOfCountry)){
                     map.put(nameOfCountry, 1);
@@ -105,34 +104,35 @@ public class SearchCountry {
     @DisplayName("Loss check")
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
-    public void checkSearchCountry(String searchParameter){
+    public void searchCountryLosses(String searchParameter){
 
-        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
-        int countOfFields = jsonPath.getInt("RestResponse.result.size()");
+        JsonPath jsonPath = EVGHelper.jsonPathSearch(baseURI, searchParameter);
+        int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
-        jsonPath = JsonResponseSearch.jsonPathSearch(allCountries);
-        int countOfFieldsAllCountries = jsonPath.getInt("RestResponse.result.size()");
+        jsonPath = EVGHelper.jsonPathSearch(allCountries);
+        int quantityOfFieldsAllCountries = jsonPath.getInt("RestResponse.result.size()");
         int counter = 0;
-        for(int i = 0; i < countOfFieldsAllCountries; i++){
+        for(int i = 0; i < quantityOfFieldsAllCountries; i++){
                 if((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
                         || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
                         || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase())){
                     counter++;
                 }
         }
-        assertEquals(countOfFields, counter);
+        assertEquals(quantityOfObjects, counter);
     }
 
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
-    public void test(String searchParameter){
-        JsonPath jsonPath = JsonResponseSearch.jsonPathSearch(baseURI, searchParameter);
+    public void searchIncorrectCountry(String searchParameter){
+        JsonPath jsonPath = EVGHelper.jsonPathSearch(baseURI, searchParameter);
         String message = jsonPath.getString("RestResponse.messages");
 
         assertEquals("[No matching country found for requested code [" + searchParameter +"].]", message);
     }
 
-    public static Stream<String> valueForMethodSource(){
-        return Stream.of("8g8", "kc7");
+    public static String[] valueForMethodSource(){
+        String[] valueForTest = {"8g8", "kc7"};
+        return valueForTest;
     }
 }

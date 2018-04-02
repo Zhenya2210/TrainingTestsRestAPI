@@ -17,19 +17,19 @@ public class Photos {
     String allPhotos = "https://jsonplaceholder.typicode.com/photos";
 
     @Test
-    public void checkSizeOfPhoto() throws IOException {
+    public void widthHeightOfPhoto() throws IOException {
         String json = given().
-                        accept(ContentType.JSON).
+                            accept(ContentType.JSON).
                         when().
                             get(allPhotos).
                         thenReturn().
-                        asString();
+                            asString();
 
         JsonPath jsonPath = new JsonPath(json);
 
-        int countOfImages = jsonPath.getInt("size()");
+        int quantityOfImages = jsonPath.getInt("size()");
 
-        for(int i = 0; i < countOfImages; i++) {
+        for(int i = 0; i < quantityOfImages; i++) {
             URL url = new URL(jsonPath.getString("url[" + i + "]"));
             BufferedImage image = ImageIO.read(url);
             int width = image.getWidth();

@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 
-public class ToolsEVG {
+public class EVGHelper {
 
-    private ToolsEVG(){}
+    private EVGHelper(){}
 
     public static Stream<String> userIDs(){
         String jsonUsers = given().
@@ -24,11 +24,9 @@ public class ToolsEVG {
 
         List<String> userIDsList = new ArrayList<>();
 
-        int countOfFields = jsonPath.getInt("size()");
+        int quantityOfFields = jsonPath.getInt("size()");
 
-        String userID;
-
-        for(int i = 0; i < countOfFields; i++){
+        for(int i = 0; i < quantityOfFields; i++){
 
             userIDsList.add(jsonPath.getString("id[" + i + "]"));
         }
@@ -36,5 +34,19 @@ public class ToolsEVG {
         Stream<String> userIDsStream = userIDsList.stream();
 
         return userIDsStream;
+    }
+
+    public static JsonPath jsonPathUsers(String parameterRequest){
+
+        String json = given().
+                    accept(ContentType.JSON).
+                when().
+                    get("/users/" + parameterRequest).
+                thenReturn().
+                    asString();
+
+        JsonPath jsonPath = new JsonPath(json);
+
+        return jsonPath;
     }
 }

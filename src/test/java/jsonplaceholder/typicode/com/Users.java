@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Users {
@@ -26,7 +27,7 @@ public class Users {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public void checkGetUsersStatusCodeSuccessful(int parameterRequest) {
+    public void getUsersStatusCodeSuccessful(int parameterRequest) {
         given().
             when().
                 get("/users/" + parameterRequest).
@@ -40,7 +41,7 @@ public class Users {
 
     @ParameterizedTest
     @ValueSource(strings = {"11", "0"})
-    public void checkGetUsersStatusCodeNotFound(String parameterRequest) {
+    public void getUsersStatusCodeNotFound(String parameterRequest) {
         given().
                 when().
                     get("/users/" + parameterRequest).
@@ -52,9 +53,9 @@ public class Users {
 
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
-    public void checkGetUsersEmail(String parameterRequest){
+    public void getUsersEmail(String parameterRequest){
 
-        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
 
         String email = jsonPath.getString("email");
 
@@ -66,14 +67,13 @@ public class Users {
         }
 
         assertSame(email, validity, "E-mail is not correct"); //check e-mail
-
     }
 
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
-    public void checkGetUsersID(String parameterRequest){
+    public void getUsersID(String parameterRequest){
 
-        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
 
         int id = jsonPath.getInt("id");
 
@@ -83,9 +83,9 @@ public class Users {
 
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
-    public void checkGetUsersLat(String parameterRequest){
+    public void getUsersLat(String parameterRequest){
 
-        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
 
         double lat = jsonPath.getDouble("address.geo.lat");
 
@@ -94,18 +94,27 @@ public class Users {
 
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
-    public void checkGetUsersLng(String parameterRequest){
+    public void existZipcode(String parameterRequest){
+        given().
+                when().
+                    get("/users/" + parameterRequest).
+                then().
+                    body("address", hasKey("zipcode"));
+    }
 
-        JsonPath jsonPath = JsonResponse.jsonPathUsers(parameterRequest);
+    @ParameterizedTest
+    @MethodSource("valueForMethodSource")
+    public void getUsersLng(String parameterRequest){
+
+        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
 
         double lng = jsonPath.getDouble("address.geo.lng");
 
         assertTrue(lng <= 180.0 && lng >= -180.0, "Долгота в недопустимых пределах");
 
-
     }
 
     public static Stream<String> valueForMethodSource(){
-        return ToolsEVG.userIDs();
+        return EVGHelper.userIDs();
     }
 }

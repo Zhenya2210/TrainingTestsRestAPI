@@ -5,9 +5,9 @@ import io.restassured.path.json.JsonPath;
 
 import static io.restassured.RestAssured.given;
 
-public class JsonResponseSearch {
+public class EVGHelper {
 
-    private JsonResponseSearch(){}
+    private EVGHelper(){}
 
     public static JsonPath jsonPathSearch(String allCountries){
         String json = given().

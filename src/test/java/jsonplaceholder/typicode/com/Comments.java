@@ -21,15 +21,14 @@ public class Comments {
                         asString();
 
         JsonPath jsonPath = new JsonPath(json);
-        int countOfComments = jsonPath.getInt("size()");
+        int quantityOfComments = jsonPath.getInt("size()");
 
         String bodyOfcomment;
 
-        for(int i = 0; i < countOfComments; i++){
+        for(int i = 0; i < quantityOfComments; i++){
             bodyOfcomment = jsonPath.getString("body[" + i + "]");
             assertNotEquals(0, bodyOfcomment.replaceAll("\\s+","").length(), "Найден пустой комментарий");
         }
-
     }
 
 }
