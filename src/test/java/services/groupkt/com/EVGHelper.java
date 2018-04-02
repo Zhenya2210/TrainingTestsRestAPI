@@ -3,6 +3,9 @@ package services.groupkt.com;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static io.restassured.RestAssured.given;
 
 public class EVGHelper {
@@ -34,6 +37,17 @@ public class EVGHelper {
         JsonPath jsonPath = new JsonPath(json);
 
         return jsonPath;
+    }
+
+    public static int numericalValueFromMessage(String message){
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(message);
+        int valueOfMessage = 0;
+        while (matcher.find()){
+            valueOfMessage = Integer.parseInt(message.substring(matcher.start(), matcher.end()));
+        }
+
+        return valueOfMessage;
     }
 
 

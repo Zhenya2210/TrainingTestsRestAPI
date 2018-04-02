@@ -10,8 +10,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,15 +59,9 @@ public class SearchCountry {
 
         String message = jsonPath.getString("RestResponse.messages");
 
-        Pattern pattern = Pattern.compile("[0-9]+");
-        Matcher matcher = pattern.matcher(message);
-        int valueOfMessage = 0;
+        int numericalValueFromMessage = EVGHelper.numericalValueFromMessage(message);
 
-        while (matcher.find()){
-            valueOfMessage = Integer.parseInt(message.substring(matcher.start(), matcher.end()));
-        }
-
-        assertEquals(quantityOfObjects, valueOfMessage);
+        assertEquals(quantityOfObjects, numericalValueFromMessage);
     }
 
     @DisplayName("Checking the search result for duplicates")

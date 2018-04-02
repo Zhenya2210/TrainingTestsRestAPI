@@ -17,7 +17,7 @@ public class Photos {
     String allPhotos = "https://jsonplaceholder.typicode.com/photos";
 
     @Test
-    public void widthHeightOfPhoto() throws IOException {
+    public void widthHeightOfPhoto() throws IOException { //very long test :)
         String json = given().
                             accept(ContentType.JSON).
                         when().
