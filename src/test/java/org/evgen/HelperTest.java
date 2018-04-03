@@ -27,14 +27,14 @@ public class HelperTest {
 
     }
 
-    public static JsonPath getJsonPath(String path, Object... parameterPath) {
+    public static JsonPath getJsonPath(String path, Object... parametersPath) {
 
         return given().
-                accept(ContentType.JSON).
+                    accept(ContentType.JSON).
                 when().
-                get(path, parameterPath).
-                thenReturn()
-                .jsonPath();
+                    get(path, parametersPath).
+                thenReturn().
+                    jsonPath();
     }
 
 

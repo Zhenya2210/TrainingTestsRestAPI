@@ -34,12 +34,12 @@ public class Users {
     public void getUsersStatusCodeSuccessful(int parameterRequest) {
         given().
                 when().
-                get(Integer.toString(parameterRequest)).
+                    get(Integer.toString(parameterRequest)).
                 then().
-                assertThat().
-                contentType(ContentType.JSON).
-                statusCode(HttpStatus.SC_OK).
-                body("id", equalTo(parameterRequest));
+                    assertThat().
+                    contentType(ContentType.JSON).
+                    statusCode(HttpStatus.SC_OK).
+                    body("id", equalTo(parameterRequest));
 
     }
 
@@ -48,11 +48,11 @@ public class Users {
     public void getUsersStatusCodeNotFound(String parameterRequest) {
         given().
                 when().
-                get(parameterRequest).
+                    get(parameterRequest).
                 then().
-                assertThat().
-                contentType(ContentType.JSON).
-                statusCode(HttpStatus.SC_NOT_FOUND);
+                    assertThat().
+                    contentType(ContentType.JSON).
+                    statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @ParameterizedTest
@@ -101,9 +101,9 @@ public class Users {
     public void existZipcode(String parameterRequest) {
         given().
                 when().
-                get(parameterRequest).
+                    get(parameterRequest).
                 then().
-                body("address", hasKey("zipcode"));
+                    body("address", hasKey("zipcode"));
     }
 
     @ParameterizedTest
