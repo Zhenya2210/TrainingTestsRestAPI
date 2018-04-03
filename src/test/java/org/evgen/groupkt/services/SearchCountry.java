@@ -1,8 +1,9 @@
-package services.groupkt.com;
+package org.evgen.groupkt.services;
 
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
+import org.evgen.HelperTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -38,7 +39,7 @@ public class SearchCountry {
     @ValueSource(strings = {"un", "RU", ""})
     public void searchCountryResult(String searchParameter){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(searchCountryURI, searchParameter);
+        JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
         int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
         for (int i = 0; i < quantityOfObjects; i++){
@@ -53,13 +54,13 @@ public class SearchCountry {
     @ValueSource(strings = {"un", "RU", ""})
     public void valueOfMessage(String searchParameter){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(searchCountryURI, searchParameter);
+        JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
 
         int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
         String message = jsonPath.getString("RestResponse.messages");
 
-        int numericalValueFromMessage = EVGHelper.numericalValueFromMessage(message);
+        int numericalValueFromMessage = HelperTest.getNumericalValueFromMessage(message);
 
         assertEquals(quantityOfObjects, numericalValueFromMessage);
     }
@@ -69,7 +70,7 @@ public class SearchCountry {
     @ValueSource(strings = {"un", "ru"})
     public void dublicateOfSearchResult(String searchParameter){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(searchCountryURI, searchParameter);
+        JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
 
         int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
@@ -99,10 +100,10 @@ public class SearchCountry {
     @ValueSource(strings = {"un", "RU", ""})
     public void searchCountryLosses(String searchParameter){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(searchCountryURI, searchParameter);
+        JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
         int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
-        jsonPath = EVGHelper.getJsonPath(allCountriesURI);
+        jsonPath = HelperTest.getJsonPath(allCountriesURI);
         int quantityOfFieldsAllCountries = jsonPath.getInt("RestResponse.result.size()");
 
         int counter = 0;
@@ -119,7 +120,7 @@ public class SearchCountry {
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
     public void searchIncorrectCountry(String searchParameter){
-        JsonPath jsonPath = EVGHelper.getJsonPath(searchCountryURI, searchParameter);
+        JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
         String message = jsonPath.getString("RestResponse.messages");
 
         assertEquals("[No matching country found for requested code [" + searchParameter +"].]", message);

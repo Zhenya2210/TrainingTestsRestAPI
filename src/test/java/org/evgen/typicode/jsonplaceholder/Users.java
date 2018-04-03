@@ -1,9 +1,10 @@
-package jsonplaceholder.typicode.com;
+package org.evgen.typicode.jsonplaceholder;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
+import org.evgen.HelperTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,6 +20,8 @@ import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Users {
+
+    public static final String REGEX = "^((\\w|[-+])+(\\.[\\w-]+)*@[\\w-]+((\\.[\\d\\p{Alpha}]+)*(\\.\\p{Alpha}{2,})*)*)$";
 
     @BeforeAll
     public static void setUP(){
@@ -55,11 +58,11 @@ public class Users {
     @MethodSource("valuesForMethodGetUsers")
     public void getUsersEmail(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
+        JsonPath jsonPath = HelperTest.getJsonPath(parameterRequest);
 
         String email = jsonPath.getString("email");
 
-        Pattern pattern = Pattern.compile("^((\\w|[-+])+(\\.[\\w-]+)*@[\\w-]+((\\.[\\d\\p{Alpha}]+)*(\\.\\p{Alpha}{2,})*)*)$");
+        Pattern pattern = Pattern.compile(REGEX);
         Matcher matcher = pattern.matcher(email);
         String validity = "";
         while (matcher.find()){
@@ -73,19 +76,19 @@ public class Users {
     @MethodSource("valuesForMethodGetUsers")
     public void getUsersID(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
+        JsonPath jsonPath = HelperTest.getJsonPath(parameterRequest);
 
-        int id = jsonPath.getInt("id");
+        String id = jsonPath.getString("id");
 
-        assertEquals(Integer.parseInt(parameterRequest), id, "id doesn't match the query"); //check id
+        assertEquals(parameterRequest, id, "id doesn't match the query"); //check id
 
     }
 
     @ParameterizedTest
     @MethodSource("valuesForMethodGetUsers")
-    public void getUsersLat(String parameterRequest){
+    public void getUsersLatitude(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
+        JsonPath jsonPath = HelperTest.getJsonPath(parameterRequest);
 
         double lat = jsonPath.getDouble("address.geo.lat");
 
@@ -104,9 +107,9 @@ public class Users {
 
     @ParameterizedTest
     @MethodSource("valuesForMethodGetUsers")
-    public void getUsersLng(String parameterRequest){
+    public void getUsersLongitude(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
+        JsonPath jsonPath = HelperTest.getJsonPath(parameterRequest);
 
         double lng = jsonPath.getDouble("address.geo.lng");
 
@@ -115,6 +118,6 @@ public class Users {
     }
 
     public static Stream<String> valuesForMethodGetUsers(){
-        return EVGHelper.userIDs();
+        return HelperTest.getAllUserIDs();
     }
 }
