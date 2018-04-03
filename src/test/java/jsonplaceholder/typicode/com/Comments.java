@@ -13,14 +13,8 @@ public class Comments {
 
     @Test
     public void commentIsNotEmpty(){
-        String json = given().
-                        accept(ContentType.JSON).
-                    when().
-                        get(uriAllComments).
-                    thenReturn().
-                        asString();
 
-        JsonPath jsonPath = new JsonPath(json);
+        JsonPath jsonPath = EVGHelper.getJsonPath(uriAllComments);
         int quantityOfComments = jsonPath.getInt("size()");
 
         String bodyOfcomment;

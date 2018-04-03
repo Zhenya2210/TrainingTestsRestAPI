@@ -12,7 +12,7 @@ public class EVGHelper {
 
     private EVGHelper(){}
 
-    public static JsonPath jsonPathSearch(String allCountries){
+    public static JsonPath getJsonPath(String allCountries){
         String json = given().
                 accept(ContentType.JSON).
                 when().
@@ -25,12 +25,12 @@ public class EVGHelper {
         return jsonPath;
     }
 
-    public static JsonPath jsonPathSearch(String baseURI, String searchParameter){
+    public static JsonPath getJsonPath(String searchCountryURI, String searchParameter){
         String json = given().
                 accept(ContentType.JSON).
                     pathParam("text", searchParameter).
                 when().
-                    get(baseURI).
+                    get(searchCountryURI).
                 thenReturn().
                     asString();
 

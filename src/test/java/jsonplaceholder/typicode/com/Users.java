@@ -22,7 +22,7 @@ public class Users {
 
     @BeforeAll
     public static void setUP(){
-        RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+        RestAssured.baseURI = "https://jsonplaceholder.typicode.com/users/";
     }
 
     @ParameterizedTest
@@ -30,7 +30,7 @@ public class Users {
     public void getUsersStatusCodeSuccessful(int parameterRequest) {
         given().
             when().
-                get("/users/" + parameterRequest).
+                get(Integer.toString(parameterRequest)).
             then().
                 assertThat().
                 contentType(ContentType.JSON).
@@ -44,7 +44,7 @@ public class Users {
     public void getUsersStatusCodeNotFound(String parameterRequest) {
         given().
                 when().
-                    get("/users/" + parameterRequest).
+                    get(parameterRequest).
                 then().
                     assertThat().
                     contentType(ContentType.JSON).
@@ -52,10 +52,10 @@ public class Users {
     }
 
     @ParameterizedTest
-    @MethodSource("valueForMethodSource")
+    @MethodSource("valuesForMethodGetUsers")
     public void getUsersEmail(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
 
         String email = jsonPath.getString("email");
 
@@ -70,51 +70,51 @@ public class Users {
     }
 
     @ParameterizedTest
-    @MethodSource("valueForMethodSource")
+    @MethodSource("valuesForMethodGetUsers")
     public void getUsersID(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
 
         int id = jsonPath.getInt("id");
 
-        assertEquals(Integer.parseInt(parameterRequest), id, "id не совпадает с запросом"); //check id
+        assertEquals(Integer.parseInt(parameterRequest), id, "id doesn't match the query"); //check id
 
     }
 
     @ParameterizedTest
-    @MethodSource("valueForMethodSource")
+    @MethodSource("valuesForMethodGetUsers")
     public void getUsersLat(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
 
         double lat = jsonPath.getDouble("address.geo.lat");
 
-        assertTrue(lat <= 90.0 && lat >= -90.0, "Широта в недопустимых пределах");
+        assertTrue(lat <= 90.0 && lat >= -90.0, "Latitude in unacceptable limits.");
     }
 
     @ParameterizedTest
-    @MethodSource("valueForMethodSource")
+    @MethodSource("valuesForMethodGetUsers")
     public void existZipcode(String parameterRequest){
         given().
                 when().
-                    get("/users/" + parameterRequest).
+                    get(parameterRequest).
                 then().
                     body("address", hasKey("zipcode"));
     }
 
     @ParameterizedTest
-    @MethodSource("valueForMethodSource")
+    @MethodSource("valuesForMethodGetUsers")
     public void getUsersLng(String parameterRequest){
 
-        JsonPath jsonPath = EVGHelper.jsonPathUsers(parameterRequest);
+        JsonPath jsonPath = EVGHelper.getJsonPath(parameterRequest);
 
         double lng = jsonPath.getDouble("address.geo.lng");
 
-        assertTrue(lng <= 180.0 && lng >= -180.0, "Долгота в недопустимых пределах");
+        assertTrue(lng <= 180.0 && lng >= -180.0, "Longitude in unacceptable limits.");
 
     }
 
-    public static Stream<String> valueForMethodSource(){
+    public static Stream<String> valuesForMethodGetUsers(){
         return EVGHelper.userIDs();
     }
 }

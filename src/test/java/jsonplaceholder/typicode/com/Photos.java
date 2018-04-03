@@ -1,43 +1,38 @@
 package jsonplaceholder.typicode.com;
 
-import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
-import org.junit.jupiter.api.Test;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.util.List;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Photos {
 
-    String allPhotos = "https://jsonplaceholder.typicode.com/photos";
+    @BeforeAll
+    public static void setUP() {
+        RestAssured.baseURI = "https://jsonplaceholder.typicode.com/photos/";
+    }
 
-    @Test
-    public void widthHeightOfPhoto() throws IOException { //very long test :)
-        String json = given().
-                            accept(ContentType.JSON).
-                        when().
-                            get(allPhotos).
-                        thenReturn().
-                            asString();
+    @ParameterizedTest
+    @MethodSource("getIdPhotos")
+    public void widthHeightOfPhoto(String idPhoto) throws IOException { //very long test
 
-        JsonPath jsonPath = new JsonPath(json);
-
-        int quantityOfImages = jsonPath.getInt("size()");
-
-        for(int i = 0; i < quantityOfImages; i++) {
-            URL url = new URL(jsonPath.getString("url[" + i + "]"));
-            BufferedImage image = ImageIO.read(url);
+            BufferedImage image = EVGHelper.getPhoto(idPhoto);
             int width = image.getWidth();
             int height = image.getHeight();
-            int idPhoto = jsonPath.getInt("id[" + i + "]");
 
-            assertEquals(600, width, "Ширина фото номер " + idPhoto + " не соответствует требованиям.");
-            assertEquals(600, height, "Высота фото номер " + idPhoto + " не соответствует требованиям.");
-        }
+            assertEquals(600, width, "Width photo number " + idPhoto + " doesn't meet the requirements.");
+            assertEquals(600, height, "Height photo number " + idPhoto + " doesn't meet the requirements.");
+
     }
+
+    public static List<String> getIdPhotos(){
+     return EVGHelper.getParametersForTestPhoto();
+    }
+
 }
