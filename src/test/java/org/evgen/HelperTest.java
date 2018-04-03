@@ -16,9 +16,10 @@ import static io.restassured.RestAssured.given;
 
 public class HelperTest {
 
-    private HelperTest(){}
+    private HelperTest() {
+    }
 
-    public static Stream<String> getAllUserIDs(){
+    public static Stream<String> getAllUserIDs() {
 
         JsonPath jsonPath = HelperTest.getJsonPath("https://jsonplaceholder.typicode.com/users/");
 
@@ -26,18 +27,18 @@ public class HelperTest {
 
     }
 
-    public static JsonPath getJsonPath(String path, Object... parameterPath){
+    public static JsonPath getJsonPath(String path, Object... parameterPath) {
 
         return given().
-                    accept(ContentType.JSON).
+                accept(ContentType.JSON).
                 when().
-                    get(path, parameterPath).
+                get(path, parameterPath).
                 thenReturn()
-                    .jsonPath();
+                .jsonPath();
     }
 
 
-    public static List<String> getIdPhotos(){
+    public static List<String> getIdPhotos() {
 
         JsonPath jsonPath = HelperTest.getJsonPath("https://jsonplaceholder.typicode.com/photos/");
 
@@ -48,7 +49,7 @@ public class HelperTest {
         return listIdPhotos;
     }
 
-    public static List<String> getAllParametersForTestComments(){
+    public static List<String> getAllParametersForTestComments() {
 
         JsonPath jsonPath = HelperTest.getJsonPath("https://jsonplaceholder.typicode.com/comments/");
 
@@ -68,11 +69,11 @@ public class HelperTest {
 
     }
 
-    public static int getNumericalValueFromMessage(String message){
+    public static int getNumericalValueFromMessage(String message) {
         Pattern pattern = Pattern.compile("[0-9]+");
         Matcher matcher = pattern.matcher(message);
         int valueOfMessage = 0;
-        while (matcher.find()){
+        while (matcher.find()) {
             valueOfMessage = Integer.parseInt(message.substring(matcher.start(), matcher.end()));
         }
         return valueOfMessage;

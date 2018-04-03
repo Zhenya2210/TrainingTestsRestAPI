@@ -23,36 +23,36 @@ public class SearchCountry {
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "UN", "zlqx", ""})
-    public void searchStatusSC_OK(String searchParameter){
+    public void searchStatusSC_OK(String searchParameter) {
 
         given().
-                    pathParam("text", searchParameter).
+                pathParam("text", searchParameter).
                 when().
-                    get(searchCountryURI).
+                get(searchCountryURI).
                 then().
-                    assertThat().
-                    statusCode(HttpStatus.SC_OK).
-                    contentType(ContentType.JSON);
+                assertThat().
+                statusCode(HttpStatus.SC_OK).
+                contentType(ContentType.JSON);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
-    public void searchCountryResult(String searchParameter){
+    public void searchCountryResult(String searchParameter) {
 
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
         int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
 
-        for (int i = 0; i < quantityOfObjects; i++){
+        for (int i = 0; i < quantityOfObjects; i++) {
             assertTrue((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
-            || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
-            || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase()));
+                    || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
+                    || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase()));
         }
 
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
-    public void valueOfMessage(String searchParameter){
+    public void valueOfMessage(String searchParameter) {
 
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
 
@@ -68,7 +68,7 @@ public class SearchCountry {
     @DisplayName("Checking the search result for duplicates")
     @ParameterizedTest
     @ValueSource(strings = {"un", "ru"})
-    public void dublicateOfSearchResult(String searchParameter){
+    public void dublicateOfSearchResult(String searchParameter) {
 
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
 
@@ -78,18 +78,16 @@ public class SearchCountry {
 
         String nameOfCountry;
 
-        for (int i = 0; i < quantityOfObjects; i++){
+        for (int i = 0; i < quantityOfObjects; i++) {
             nameOfCountry = jsonPath.getString("RestResponse.result[" + i + "].name");
-                if (!map.containsKey(nameOfCountry)){
-                    map.put(nameOfCountry, 1);
-                    }
-                else
-                    {
-                    map.put(nameOfCountry, map.get(nameOfCountry) + 1);
-                    }
+            if (!map.containsKey(nameOfCountry)) {
+                map.put(nameOfCountry, 1);
+            } else {
+                map.put(nameOfCountry, map.get(nameOfCountry) + 1);
+            }
         }
 
-        for(Map.Entry<String, Integer> pair: map.entrySet()){
+        for (Map.Entry<String, Integer> pair : map.entrySet()) {
             int value = pair.getValue();
             assertEquals(1, value);
         }
@@ -98,7 +96,7 @@ public class SearchCountry {
     @DisplayName("Loss check")
     @ParameterizedTest
     @ValueSource(strings = {"un", "RU", ""})
-    public void searchCountryLosses(String searchParameter){
+    public void searchCountryLosses(String searchParameter) {
 
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
         int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
@@ -107,26 +105,26 @@ public class SearchCountry {
         int quantityOfFieldsAllCountries = jsonPath.getInt("RestResponse.result.size()");
 
         int counter = 0;
-        for(int i = 0; i < quantityOfFieldsAllCountries; i++){
-                if((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
-                        || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
-                        || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase())){
-                    counter++;
-                }
+        for (int i = 0; i < quantityOfFieldsAllCountries; i++) {
+            if ((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
+                    || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
+                    || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase())) {
+                counter++;
+            }
         }
         assertEquals(quantityOfObjects, counter);
     }
 
     @ParameterizedTest
     @MethodSource("valueForMethodSource")
-    public void searchIncorrectCountry(String searchParameter){
+    public void searchIncorrectCountry(String searchParameter) {
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
         String message = jsonPath.getString("RestResponse.messages");
 
-        assertEquals("[No matching country found for requested code [" + searchParameter +"].]", message);
+        assertEquals("[No matching country found for requested code [" + searchParameter + "].]", message);
     }
 
-    public static String[] valueForMethodSource(){
+    public static String[] valueForMethodSource() {
         String[] valueForTest = {"8g8", "kc7"};
         return valueForTest;
     }
