@@ -26,13 +26,13 @@ public class SearchCountry {
     public void searchStatusSC_OK(String searchParameter) {
 
         given().
-                pathParam("text", searchParameter).
+                    pathParam("text", searchParameter).
                 when().
-                get(searchCountryURI).
+                    get(searchCountryURI).
                 then().
-                assertThat().
-                statusCode(HttpStatus.SC_OK).
-                contentType(ContentType.JSON);
+                    assertThat().
+                    statusCode(HttpStatus.SC_OK).
+                    contentType(ContentType.JSON);
     }
 
     @ParameterizedTest
@@ -67,18 +67,18 @@ public class SearchCountry {
 
     @DisplayName("Checking the search result for duplicates")
     @ParameterizedTest
-    @ValueSource(strings = {"un", "ru"})
+    @ValueSource(strings = {"un", "RU"})
     public void dublicateOfSearchResult(String searchParameter) {
 
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
 
-        int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
+        int quantityOfObjectsSearchResult = jsonPath.getInt("RestResponse.result.size()");
 
         HashMap<String, Integer> map = new HashMap<>();
 
         String nameOfCountry;
 
-        for (int i = 0; i < quantityOfObjects; i++) {
+        for (int i = 0; i < quantityOfObjectsSearchResult; i++) {
             nameOfCountry = jsonPath.getString("RestResponse.result[" + i + "].name");
             if (!map.containsKey(nameOfCountry)) {
                 map.put(nameOfCountry, 1);
@@ -99,20 +99,20 @@ public class SearchCountry {
     public void searchCountryLosses(String searchParameter) {
 
         JsonPath jsonPath = HelperTest.getJsonPath(searchCountryURI, searchParameter);
-        int quantityOfObjects = jsonPath.getInt("RestResponse.result.size()");
+        int quantityOfObjectsSearchResult = jsonPath.getInt("RestResponse.result.size()");
 
         jsonPath = HelperTest.getJsonPath(allCountriesURI);
-        int quantityOfFieldsAllCountries = jsonPath.getInt("RestResponse.result.size()");
+        int quantityOfObjectsAllCountries = jsonPath.getInt("RestResponse.result.size()");
 
         int counter = 0;
-        for (int i = 0; i < quantityOfFieldsAllCountries; i++) {
+        for (int i = 0; i < quantityOfObjectsAllCountries; i++) {
             if ((jsonPath.getString("RestResponse.result[" + i + "].name")).toLowerCase().contains(searchParameter.toLowerCase())
                     || (jsonPath.getString("RestResponse.result[" + i + "].alpha2_code")).toLowerCase().contains(searchParameter.toLowerCase())
                     || (jsonPath.getString("RestResponse.result[" + i + "].alpha3_code")).toLowerCase().contains(searchParameter.toLowerCase())) {
                 counter++;
             }
         }
-        assertEquals(quantityOfObjects, counter);
+        assertEquals(quantityOfObjectsSearchResult, counter);
     }
 
     @ParameterizedTest
