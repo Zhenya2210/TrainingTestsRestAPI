@@ -42,22 +42,15 @@ public class HelperTest {
 
         JsonPath jsonPath = HelperTest.getJsonPath("https://jsonplaceholder.typicode.com/photos/");
 
-        List<String> listIdPhotos;
-
-        listIdPhotos = jsonPath.getList("id", String.class);
-
-        return listIdPhotos;
+        return jsonPath.getList("id", String.class);
     }
 
     public static List<String> getAllParametersForTestComments() {
 
         JsonPath jsonPath = HelperTest.getJsonPath("https://jsonplaceholder.typicode.com/comments/");
 
-        List<String> listIdComments;
+        return jsonPath.getList("id", String.class);
 
-        listIdComments = jsonPath.getList("id", String.class);
-
-        return listIdComments;
     }
 
     public static BufferedImage getPhoto(String idPhoto) throws IOException {
