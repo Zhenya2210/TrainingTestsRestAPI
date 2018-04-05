@@ -1,5 +1,7 @@
 package org.evgen.dogs.testing;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Dog {
@@ -7,11 +9,26 @@ public class Dog {
     String name;
     Double weight;
     Double height;
+    Date timeOfBirth;
 
     public Dog(String name, Double weight, Double height) {
         this.name = name;
         this.weight = weight;
         this.height = height;
+    }
+
+    public Dog(String name, Double weight, Double height, String timeOfBirth) throws ParseException {
+        this.name = name;
+        this.weight = weight;
+        this.height = height;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("uuuu-MM-dd'T'HH:mm:ss.SSSXXXX");
+        Date date = dateFormat.parse(timeOfBirth);
+        this.timeOfBirth = date;
+    }
+
+    public void setTimeOfBirth(Date timeOfBirth) {
+        this.timeOfBirth = timeOfBirth;
     }
 
     public void setName(String name) {
@@ -37,5 +54,9 @@ public class Dog {
 
     public Double getHeight() {
         return height;
+    }
+
+    public Date getTimeOfBirth() {
+        return timeOfBirth;
     }
 }
