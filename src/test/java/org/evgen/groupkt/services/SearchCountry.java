@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchCountry {
 
-    private String searchCountryURI = "http://services.groupkt.com/country/search?text={text}";
-    private String allCountriesURI = "http://services.groupkt.com/country/get/all";
+    protected String searchCountryURI = "http://services.groupkt.com/country/search?text={text}";
+    protected String allCountriesURI = "http://services.groupkt.com/country/get/all";
 
     @ParameterizedTest
     @ValueSource(strings = {"un", "UN", "zlqx", ""})
@@ -33,6 +33,8 @@ public class SearchCountry {
                     assertThat().
                     statusCode(HttpStatus.SC_OK).
                     contentType(ContentType.JSON);
+
+
     }
 
     @ParameterizedTest

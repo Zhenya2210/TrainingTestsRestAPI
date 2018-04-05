@@ -2,6 +2,7 @@ package org.evgen.typicode.jsonplaceholder;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Cookie;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
 import org.evgen.HelperTest;
