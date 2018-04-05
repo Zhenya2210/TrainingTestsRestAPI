@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 
+/**
+ * Testing application github: https://github.com/timazet/java-course
+ */
 public class TestingDogs {
 
     @BeforeAll
