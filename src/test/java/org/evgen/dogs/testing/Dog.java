@@ -1,26 +1,22 @@
 package org.evgen.dogs.testing;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+
 
 public class Dog {
 
     String name;
-    Double weight;
-    Double height;
+    double weight;
+    double height;
+    OffsetDateTime timeOfBirth;
 
-    public Dog(String name, Double weight, Double height) {
+
+    public Dog(String name, double weight, double height) {
         this.name = name;
         this.weight = weight;
         this.height = height;
 
     }
-
 
 
     public void setName(String name) {
@@ -46,6 +42,15 @@ public class Dog {
 
     public Double getHeight() {
         return height;
+    }
+
+    public void setTimeOfBirth(OffsetDateTime timeOfBirth) {
+        this.timeOfBirth = timeOfBirth;
+    }
+
+    public OffsetDateTime getTimeOfBirth() {
+
+        return timeOfBirth;
     }
 
 
