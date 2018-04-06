@@ -29,7 +29,7 @@ public class TestingDogsWithoutDateOfBirth {
      * Positive test
      */
     @ParameterizedTest
-    @MethodSource("valuesForMethodCreateDogs")
+    @MethodSource("getCorrectDogs")
     public void createNewDog(Dog dog){
 
         String idDogExpected = given().
@@ -73,8 +73,29 @@ public class TestingDogsWithoutDateOfBirth {
 
     }
 
-    public static List<Dog> valuesForMethodCreateDogs() {
+    @ParameterizedTest
+    @MethodSource("getIncorrectDogs")
+    public void createNewIncorrectDog(Dog dog){
+
+        given().
+                    contentType("application/json").
+                    body(dog).
+                when().
+                    post().
+                then().
+                    assertThat().
+                statusCode(400);
+
+
+    }
+
+    public static List<Dog> getCorrectDogs() {
 
         return HelperTest.getCorrectDogs();
+    }
+
+    public static List<Dog> getIncorrectDogs() {
+
+        return HelperTest.getIncorrectDogs();
     }
 }
