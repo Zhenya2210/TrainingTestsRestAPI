@@ -79,13 +79,14 @@ public class HelperTest {
         final String nameOneHundredMinusOneCharacters = "Представьте себе офисную ATC, которую можно подключить через Интернет в течение нескольких минут, б";
 
         List<Dog> dogs = new ArrayList<>();
-            Dog dog1 = new Dog("I", 13.0, 50.0);
-            Dog dog2 = new Dog("Dino", 50.3, 10.7);
-            Dog dog3 = new Dog(nameOneHundredCharacters, 13.0, 50.0);
-            Dog dog4 = new Dog(nameOneHundredMinusOneCharacters, 20.1, 14.5);
-            Dog dog5 = new Dog("Bobik", 1.7e+308, 1.7e+308);
-            Dog dog6 = new Dog("Domik", 0.1, 0.1);
-            Dog dog7 = new Dog("Bobik", 13, 50);
+            Dog dog1 = new Dog("I", "13.04", "50.66");
+            Dog dog2 = new Dog("Di", "50", "10");
+            Dog dog3 = new Dog(nameOneHundredCharacters, "13.0", "50.0");
+            Dog dog4 = new Dog(nameOneHundredMinusOneCharacters, "20.1", "14.5");
+            Dog dog5 = new Dog("Bobik", "1.7e+308", "13");
+            Dog dog6 = new Dog("Bobik", "8", "1.7e+308");
+            Dog dog7 = new Dog("Domik", "0.01", "0.01");
+            Dog dog8 = new Dog("Pidor", "0.895765765875487623854832648732", "50");
         dogs.add(dog1);
         dogs.add(dog2);
         dogs.add(dog3);
@@ -93,6 +94,7 @@ public class HelperTest {
         dogs.add(dog5);
         dogs.add(dog6);
         dogs.add(dog7);
+        dogs.add(dog8);
         return dogs;
     }
 
@@ -100,16 +102,16 @@ public class HelperTest {
         final String nameOneHundredPlusOneCharacters = "Представьте себе офисную ATC, которую можно подключить через Интернет в течение нескольких минут, без";
 
         List<Dog> dogs = new ArrayList<>();
-
-        Dog dog1 = new Dog("", 13.0, 50.0);
-        Dog dog2 = new Dog("Dino", 0, 0);
-        Dog dog3 = new Dog("Dino", -1, -1);
-        Dog dog4 = new Dog(nameOneHundredPlusOneCharacters, 13.0, 50.0);
-
+            Dog dog1 = new Dog("", "13.0", "50.0");
+            Dog dog2 = new Dog("Dino", "0", "0");
+            Dog dog3 = new Dog("Dino", "-1", "-1");
+            Dog dog4 = new Dog(nameOneHundredPlusOneCharacters, "13.0", "50.0");
+            Dog dog5 = new Dog(" ", "13.0", "50.0");
         dogs.add(dog1);
         dogs.add(dog2);
         dogs.add(dog3);
         dogs.add(dog4);
+        dogs.add(dog5);
 
         return dogs;
     }

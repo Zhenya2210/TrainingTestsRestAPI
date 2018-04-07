@@ -6,12 +6,12 @@ import java.time.OffsetDateTime;
 public class Dog {
 
     String name;
-    double weight;
-    double height;
+    String weight;
+    String height;
     OffsetDateTime timeOfBirth;
 
 
-    public Dog(String name, double weight, double height) {
+    public Dog(String name, String weight, String height) {
         this.name = name;
         this.weight = weight;
         this.height = height;
@@ -23,11 +23,11 @@ public class Dog {
         this.name = name;
     }
 
-    public void setWeight(Double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
-    public void setHeight(Double height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
@@ -36,11 +36,11 @@ public class Dog {
         return name;
     }
 
-    public Double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public Double getHeight() {
+    public String getHeight() {
         return height;
     }
 
