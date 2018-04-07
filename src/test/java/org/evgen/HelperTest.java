@@ -86,7 +86,7 @@ public class HelperTest {
             Dog dog5 = new Dog("Bobik", "1.7e+308", "13");
             Dog dog6 = new Dog("Bobik", "8", "1.7e+308");
             Dog dog7 = new Dog("Domik", "0.01", "0.01");
-            Dog dog8 = new Dog("Pidor", "0.895765765875487623854832648732", "50");
+            Dog dog8 = new Dog("Peter", "0.895765765875487623854832648732", "50");
         dogs.add(dog1);
         dogs.add(dog2);
         dogs.add(dog3);
