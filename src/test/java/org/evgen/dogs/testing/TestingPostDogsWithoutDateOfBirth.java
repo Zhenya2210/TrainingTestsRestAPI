@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Testing application github: https://github.com/timazet/java-course
  */
-public class TestingDogsWithoutDateOfBirth {
+public class TestingPostDogsWithoutDateOfBirth {
 
 
     @BeforeAll
@@ -125,6 +125,24 @@ public class TestingDogsWithoutDateOfBirth {
         assertEquals("[DecimalMin]", errorCode);
         assertEquals("[должно быть больше чем 0]", errorMessage);
     }
+
+    @ParameterizedTest
+    @MethodSource("getDogsWithWrongOtherValues")
+    public void createDogsWithWrongOtherValues(Dog dog){
+        given().
+                    contentType("application/json").
+                    body(dog).
+                when().
+                    post().
+                then().
+                    assertThat().
+                    statusCode(400);
+    }
+
+    public static List<Dog> getDogsWithWrongOtherValues(){
+        return HelperTest.getDogsWithWrongOtherValues();
+    }
+
 
     public static List<Dog> getCorrectDogs() {
 

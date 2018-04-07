@@ -83,10 +83,12 @@ public class HelperTest {
             Dog dog2 = new Dog("Di", "50", "10");
             Dog dog3 = new Dog(nameOneHundredCharacters, "13.0", "50.0");
             Dog dog4 = new Dog(nameOneHundredMinusOneCharacters, "20.1", "14.5");
-            Dog dog5 = new Dog("Bobik", "1.7e+308", "13");
-            Dog dog6 = new Dog("Gnomik", "8", "1.7e+308");
-            Dog dog7 = new Dog("Domik", "0.01", "0.01");
-            Dog dog8 = new Dog("Peter", "0.095765765875487623854832648732", "50");
+            Dog dog5 = new Dog("Scooby doo", "1.7e+308", "13");
+            Dog dog6 = new Dog("Goofy", "8", "1.7e+308");
+            Dog dog7 = new Dog("Pluto", "0.01", "0.01");
+            Dog dog8 = new Dog("Max Goof", "0.095765765875487623854832648732", "50");
+            Dog dog9 = new Dog("Deput@t", "1.8e+308", "50");
+            Dog dog10 = new Dog("Rex", "13.04", "1.8e+308");
         dogs.add(dog1);
         dogs.add(dog2);
         dogs.add(dog3);
@@ -95,6 +97,8 @@ public class HelperTest {
         dogs.add(dog6);
         dogs.add(dog7);
         dogs.add(dog8);
+        dogs.add(dog9);
+        dogs.add(dog10);
         return dogs;
     }
 
@@ -132,7 +136,20 @@ public class HelperTest {
         dogs.add(dog3);
 
         return dogs;
-
     }
 
+    public static List<Dog> getDogsWithWrongOtherValues(){
+
+        List<Dog> dogs = new ArrayList<>();
+            Dog dog1 = new Dog("Scrappy doo", "50.0 + 34.8", "50.0");
+            Dog dog2 = new Dog("Droopy", "13.0", "50.0 + 28.3");
+            Dog dog3 = new Dog("Spike", "60 oz.", "50.98");
+            Dog dog4 = new Dog("Hachiko", "13.0", "35 in.");
+        dogs.add(dog1);
+        dogs.add(dog2);
+        dogs.add(dog3);
+        dogs.add(dog4);
+
+        return dogs;
+    }
 }
