@@ -1,7 +1,6 @@
 package org.evgen.dogs.testing;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.config.JsonPathConfig;
 import org.evgen.HelperTest;
@@ -14,9 +13,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.JsonConfig.jsonConfig;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testing application github: https://github.com/timazet/java-course
@@ -30,55 +27,6 @@ public class TestingDogsWithoutDateOfBirth {
         RestAssured.config = RestAssured.config().jsonConfig(jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
 
     }
-
-//    /**
-//     *
-//     * Positive test
-//     */
-//    @ParameterizedTest
-//    @MethodSource("getCorrectDogs")
-//    public void createNewDog(Dog dog){
-//
-//        String idDogExpected = given().
-//                    contentType("application/json").
-//                    body(dog).
-//                when().
-//                    post().
-//                then().
-//                    assertThat().
-//                    statusCode(200).
-//                extract().
-//                    path("id");
-//
-//        String idDogActual = given().
-//                                contentType("application/json").
-//                            when().
-//                                get(idDogExpected).
-//                            then().
-//                                assertThat().
-//                                statusCode(200).
-//                            extract().
-//                                path("id");
-//
-//        assertEquals(idDogExpected, idDogActual);
-//
-//        given().
-//                contentType("application/json").
-//                when().
-//                    delete(idDogExpected).
-//                then().
-//                    assertThat().
-//                        statusCode(204);
-//
-//        given().
-//                contentType("application/json").
-//                when().
-//                    get(idDogExpected).
-//                then().
-//                    assertThat().
-//                    statusCode(404);
-//
-//    }
 
     @ParameterizedTest
     @MethodSource("getCorrectDogs")
@@ -98,26 +46,84 @@ public class TestingDogsWithoutDateOfBirth {
         String actualName = jsonPathNewDog.getString("name");
         double actualHeight = jsonPathNewDog.getDouble("height");
         double actualWeight = jsonPathNewDog.getDouble("weight");
+        String dateOfBirth = jsonPathNewDog.getString("dateOfBirth");
 
+        assertNull(dateOfBirth, "Date of birth isn't null");
         assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
         assertEquals(Double.parseDouble(dog.getHeight()), actualHeight, "Height doesn't match the height you added earlier");
         assertEquals(Double.parseDouble(dog.getWeight()), actualWeight, "Weight doesn't match the weight you added earlier");
 
     }
 
-    @ParameterizedTest
-    @MethodSource("getIncorrectDogs")
-    public void createNewIncorrectDog(Dog dog){
 
-        given().
-                    contentType("application/json").
+    @ParameterizedTest
+    @MethodSource("getDogsWithIncorrectName")
+    public void errorCodeNotBlankSized(Dog dog){
+
+        JsonPath jsonPathDog = given().
+                contentType("application/json").
+                body(dog).
+            when().
+                post().
+            then().
+                assertThat().
+                statusCode(400).
+            extract().
+                jsonPath();
+
+        String fieldError = jsonPathDog.getString("field");
+        String errorCode = jsonPathDog.getString("errorCode");
+        String errorMessage = jsonPathDog.getString("errorMessage");
+        assertEquals("[name]", fieldError);
+        assertEquals("[NotBlankSized]", errorCode);
+        assertEquals("[размер должен быть между 1 и 100]", errorMessage);
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDogsWithIncorrectWeight")
+    public void dogsWithIncorrectWeight(Dog dog){
+
+        JsonPath jsonPath = given().
+                                contentType("application/json").
+                                body(dog).
+                            when().
+                                post().
+                            then().
+                                assertThat().
+                                statusCode(400).
+                            extract().
+                                jsonPath();
+
+        String fieldError = jsonPath.getString("field");
+        String errorCode = jsonPath.getString("errorCode");
+        String errorMessage = jsonPath.getString("errorMessage");
+        assertEquals("[weight]", fieldError);
+        assertEquals("[DecimalMin]", errorCode);
+        assertEquals("[должно быть больше чем 0]", errorMessage);
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDogsWithIncorrectHeight")
+    public void dogsWithIncorrectHeight(Dog dog){
+
+        JsonPath jsonPath = given().
+                contentType("application/json").
                     body(dog).
                 when().
                     post().
                 then().
                     assertThat().
-                statusCode(400);
+                    statusCode(400).
+                extract().
+                    jsonPath();
 
+        String fieldError = jsonPath.getString("field");
+        String errorCode = jsonPath.getString("errorCode");
+        String errorMessage = jsonPath.getString("errorMessage");
+        assertEquals("[height]", fieldError);
+        assertEquals("[DecimalMin]", errorCode);
+        assertEquals("[должно быть больше чем 0]", errorMessage);
     }
 
     public static List<Dog> getCorrectDogs() {
@@ -125,8 +131,18 @@ public class TestingDogsWithoutDateOfBirth {
         return HelperTest.getCorrectDogs();
     }
 
-    public static List<Dog> getIncorrectDogs() {
+    public static List<Dog> getDogsWithIncorrectWeight() {
 
-        return HelperTest.getIncorrectDogs();
+        return HelperTest.getDogsWithIncorrectWeight();
+    }
+
+    public static List<Dog> getDogsWithIncorrectHeight() {
+
+        return HelperTest.getDogsWithIncorrectHeight();
+    }
+
+    public static List<Dog> getDogsWithIncorrectName(){
+
+       return HelperTest.getDogsWithIncorrectName();
     }
 }

@@ -84,9 +84,9 @@ public class HelperTest {
             Dog dog3 = new Dog(nameOneHundredCharacters, "13.0", "50.0");
             Dog dog4 = new Dog(nameOneHundredMinusOneCharacters, "20.1", "14.5");
             Dog dog5 = new Dog("Bobik", "1.7e+308", "13");
-            Dog dog6 = new Dog("Bobik", "8", "1.7e+308");
+            Dog dog6 = new Dog("Gnomik", "8", "1.7e+308");
             Dog dog7 = new Dog("Domik", "0.01", "0.01");
-            Dog dog8 = new Dog("Peter", "0.895765765875487623854832648732", "50");
+            Dog dog8 = new Dog("Peter", "0.095765765875487623854832648732", "50");
         dogs.add(dog1);
         dogs.add(dog2);
         dogs.add(dog3);
@@ -98,22 +98,41 @@ public class HelperTest {
         return dogs;
     }
 
-    public static List<Dog> getIncorrectDogs(){
+    public static List<Dog> getDogsWithIncorrectWeight(){
+
+        List<Dog> dogs = new ArrayList<>();
+            Dog dog1 = new Dog("Dino", "0", "8");
+            Dog dog2 = new Dog("Dino", "-1", "8.0");
+        dogs.add(dog1);
+        dogs.add(dog2);
+
+        return dogs;
+    }
+
+    public static List<Dog> getDogsWithIncorrectHeight(){
+
+        List<Dog> dogs = new ArrayList<>();
+            Dog dog1 = new Dog("Dino", "8", "0");
+            Dog dog2 = new Dog("Dino", "8.0", "-1");
+        dogs.add(dog1);
+        dogs.add(dog2);
+
+        return dogs;
+    }
+
+    public static List<Dog> getDogsWithIncorrectName(){
         final String nameOneHundredPlusOneCharacters = "Представьте себе офисную ATC, которую можно подключить через Интернет в течение нескольких минут, без";
 
         List<Dog> dogs = new ArrayList<>();
             Dog dog1 = new Dog("", "13.0", "50.0");
-            Dog dog2 = new Dog("Dino", "0", "0");
-            Dog dog3 = new Dog("Dino", "-1", "-1");
-            Dog dog4 = new Dog(nameOneHundredPlusOneCharacters, "13.0", "50.0");
-            Dog dog5 = new Dog(" ", "13.0", "50.0");
+            Dog dog2 = new Dog(nameOneHundredPlusOneCharacters, "13.0", "50.0");
+            Dog dog3 = new Dog(" ", "13.0", "50.0");
         dogs.add(dog1);
         dogs.add(dog2);
         dogs.add(dog3);
-        dogs.add(dog4);
-        dogs.add(dog5);
 
         return dogs;
+
     }
 
 }
