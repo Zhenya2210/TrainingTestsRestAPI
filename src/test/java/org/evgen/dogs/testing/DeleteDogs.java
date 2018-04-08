@@ -24,7 +24,6 @@ public class DeleteDogs {
     public void deleteDogs(String idDog){
 
         given().
-                accept("application/json").
             when().
                 delete(idDog).
             then().
@@ -32,7 +31,6 @@ public class DeleteDogs {
                 statusCode(HttpStatus.SC_NO_CONTENT);
 
         given().
-                accept("application/json").
             when().
                 get(idDog).
             then().
@@ -40,7 +38,6 @@ public class DeleteDogs {
                 statusCode(HttpStatus.SC_NOT_FOUND);
 
     }
-
 
     private static List<String> getIdCorrectDogs(){
         return HelperTest.getIdCorrectDogs();

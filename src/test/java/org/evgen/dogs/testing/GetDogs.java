@@ -16,15 +16,12 @@ import static org.hamcrest.Matchers.hasKey;
 
 public class GetDogs {
 
-
-
     @BeforeAll
     public static void setUp(){
 
         RestAssured.baseURI = "http://localhost:8085/dog/";
 
     }
-
 
     @ParameterizedTest
     @MethodSource("getIdCorrectDogs")

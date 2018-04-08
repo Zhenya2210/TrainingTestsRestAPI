@@ -20,8 +20,6 @@ import static io.restassured.RestAssured.given;
 
 public class HelperTest {
 
-//    private static List<String> idCorrectDogs = new ArrayList<>();
-
     private HelperTest() {
     }
 
