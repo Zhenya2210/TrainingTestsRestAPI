@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Testing application github: https://github.com/timazet/java-course
  */
-public class TestingPostDogsWithoutDateOfBirth {
+public class TestingPostDogs {
 
 
     @BeforeAll
@@ -46,7 +45,34 @@ public class TestingPostDogsWithoutDateOfBirth {
         String actualName = jsonPathNewDog.getString("name");
         double actualHeight = jsonPathNewDog.getDouble("height");
         double actualWeight = jsonPathNewDog.getDouble("weight");
-        String dateOfBirth = jsonPathNewDog.getString("dateOfBirth");
+        String dateOfBirth = jsonPathNewDog.getString("timeOfBirth");
+
+        assertNull(dateOfBirth, "Date of birth isn't null");
+        assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
+        assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
+        assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("getCorrectDogsSpecialCases")
+    public void crateNewCorrectDogSpecialCase(DogSpecialCase dog){
+
+        JsonPath jsonPathNewDog = given().
+                    contentType("application/json").
+                    body(dog).
+                when().
+                    post().
+                then().
+                    assertThat().
+                    statusCode(200).
+                extract().
+                    jsonPath();
+
+        String actualName = jsonPathNewDog.getString("name");
+        double actualHeight = jsonPathNewDog.getDouble("height");
+        double actualWeight = jsonPathNewDog.getDouble("weight");
+        String dateOfBirth = jsonPathNewDog.getString("timeOfBirth");
 
         assertNull(dateOfBirth, "Date of birth isn't null");
         assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
@@ -128,7 +154,7 @@ public class TestingPostDogsWithoutDateOfBirth {
 
     @ParameterizedTest
     @MethodSource("getDogsWithWrongOtherValues")
-    public void createDogsWithWrongOtherValues(Dog dog){
+    public void createDogsWithWrongOtherValues(DogSpecialCase dog){
         given().
                     contentType("application/json").
                     body(dog).
@@ -139,7 +165,34 @@ public class TestingPostDogsWithoutDateOfBirth {
                     statusCode(400);
     }
 
-    public static List<Dog> getDogsWithWrongOtherValues(){
+    @ParameterizedTest
+    @MethodSource("getCorrectDogsWithDateOfBirth")
+    public void createCorrectDogsWithDateOfBirth(Dog dog){
+
+        JsonPath jsonPathNewDog = given().
+                    contentType("application/json").
+                    body(dog).
+                when().
+                    post().
+                then().
+                    assertThat().
+                    statusCode(200).
+                extract().
+                    jsonPath();
+
+        String actualName = jsonPathNewDog.getString("name");
+        double actualHeight = jsonPathNewDog.getDouble("height");
+        double actualWeight = jsonPathNewDog.getDouble("weight");
+        String actualTimeOfBirth = jsonPathNewDog.getString("timeOfBirth");
+
+        assertEquals(dog.getTimeOfBirth(), actualTimeOfBirth);
+        assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
+        assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
+        assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
+
+    }
+
+    public static List<DogSpecialCase> getDogsWithWrongOtherValues(){
         return HelperTest.getDogsWithWrongOtherValues();
     }
 
@@ -162,5 +215,13 @@ public class TestingPostDogsWithoutDateOfBirth {
     public static List<Dog> getDogsWithIncorrectName(){
 
        return HelperTest.getDogsWithIncorrectName();
+    }
+
+    public static List<DogSpecialCase> getCorrectDogsSpecialCases(){
+       return HelperTest.getCorrectDogsSpecialCases();
+    }
+
+    public static List<Dog> getCorrectDogsWithDateOfBirth(){
+        return HelperTest.getCorrectDogsWithDateOfBirth();
     }
 }

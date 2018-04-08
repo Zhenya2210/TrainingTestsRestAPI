@@ -1,33 +1,37 @@
 package org.evgen.dogs.testing;
 
-import java.time.OffsetDateTime;
-
 
 public class Dog {
 
     String name;
-    String weight;
-    String height;
-    OffsetDateTime timeOfBirth;
+    double weight;
+    double height;
+    String timeOfBirth;
 
 
-    public Dog(String name, String weight, String height) {
+    public Dog(String name, double weight, double height) {
         this.name = name;
         this.weight = weight;
         this.height = height;
 
     }
 
+    public Dog(String name, double weight, double height, String timeOfBirth) {
+        this.name = name;
+        this.weight = weight;
+        this.height = height;
+        this.timeOfBirth = timeOfBirth;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
@@ -36,19 +40,19 @@ public class Dog {
         return name;
     }
 
-    public String getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public String getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setTimeOfBirth(OffsetDateTime timeOfBirth) {
+    public void setTimeOfBirth(String timeOfBirth) {
         this.timeOfBirth = timeOfBirth;
     }
 
-    public OffsetDateTime getTimeOfBirth() {
+    public String getTimeOfBirth() {
 
         return timeOfBirth;
     }

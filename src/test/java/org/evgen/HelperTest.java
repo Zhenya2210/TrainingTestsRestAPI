@@ -3,6 +3,7 @@ package org.evgen;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.evgen.dogs.testing.Dog;
+import org.evgen.dogs.testing.DogSpecialCase;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -79,24 +80,23 @@ public class HelperTest {
         final String nameOneHundredMinusOneCharacters = "Представьте себе офисную ATC, которую можно подключить через Интернет в течение нескольких минут, б";
 
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog("I", "13.04", "50.66"));
-        dogs.add(new Dog("Di", "50", "10"));
-        dogs.add(new Dog(nameOneHundredCharacters, "13.0", "50.0"));
-        dogs.add(new Dog(nameOneHundredMinusOneCharacters, "20.1", "14.5"));
-        dogs.add(new Dog("Scooby doo", "1.7e+308", "13"));
-        dogs.add(new Dog("Goofy", "8", "1.7e+308"));
-        dogs.add(new Dog("Pluto", "0.01", "0.01"));
-        dogs.add(new Dog("Max Goof", "0.095765765875487623854832648732", "50"));
-        dogs.add(new Dog("Deput@t", "1.8e+308", "50"));
-        dogs.add(new Dog("Rex", "13.04", "1.8e+308"));
+        dogs.add(new Dog("I", 13.04, 50.66));
+        dogs.add(new Dog("Di", 50, 10));
+        dogs.add(new Dog(nameOneHundredCharacters, 13.0, 50.0));
+        dogs.add(new Dog(nameOneHundredMinusOneCharacters, 20.1, 14.5));
+        dogs.add(new Dog("Scooby doo", 1.7e+308, 13));
+        dogs.add(new Dog("Goofy", 8, 1.7e+308));
+        dogs.add(new Dog("Pluto", 0.01, 0.01));
+        dogs.add(new Dog("Max Goof", 0.095765765875487623854832648732, 50));
+
         return dogs;
     }
 
     public static List<Dog> getDogsWithIncorrectWeight(){
 
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog("Dino", "0", "8"));
-        dogs.add(new Dog("Dino", "-1", "8.0"));
+        dogs.add(new Dog("Dino", 0, 8));
+        dogs.add(new Dog("Dino", -1, 8.0));
 
         return dogs;
     }
@@ -104,8 +104,8 @@ public class HelperTest {
     public static List<Dog> getDogsWithIncorrectHeight(){
 
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog("Dino", "8", "0"));
-        dogs.add(new Dog("Dino", "8.0", "-1"));
+        dogs.add(new Dog("Dino", 8, 0));
+        dogs.add(new Dog("Dino", 8.0, -1));
 
         return dogs;
     }
@@ -114,20 +114,38 @@ public class HelperTest {
         final String nameOneHundredPlusOneCharacters = "Представьте себе офисную ATC, которую можно подключить через Интернет в течение нескольких минут, без";
 
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog("", "13.0", "50.0"));
-        dogs.add(new Dog(nameOneHundredPlusOneCharacters, "13.0", "50.0"));
-        dogs.add(new Dog(" ", "13.0", "50.0"));
+        dogs.add(new Dog("", 13.0, 50.0));
+        dogs.add(new Dog(nameOneHundredPlusOneCharacters, 13.0, 50.0));
+        dogs.add(new Dog(" ", 13.0, 50.0));
 
         return dogs;
     }
 
-    public static List<Dog> getDogsWithWrongOtherValues(){
+    public static List<DogSpecialCase> getDogsWithWrongOtherValues(){
 
+        List<DogSpecialCase> dogs = new ArrayList<>();
+        dogs.add(new DogSpecialCase("Scrappy doo", "50.0 + 34.8", "50.0"));
+        dogs.add(new DogSpecialCase("Droopy", "13.0", "50.0 + 28.3"));
+        dogs.add(new DogSpecialCase("Spike", "60 oz.", "50.98"));
+        dogs.add(new DogSpecialCase("Hachiko", "13.0", "35 in."));
+
+        return dogs;
+    }
+
+    public static List<DogSpecialCase> getCorrectDogsSpecialCases(){
+
+        List<DogSpecialCase> dogs = new ArrayList<>();
+
+        dogs.add(new DogSpecialCase("Deput@t", "1.8e+308", "50"));
+        dogs.add(new DogSpecialCase("Rex", "13.04", "1.8e+308"));
+
+        return dogs;
+    }
+
+    public static List<Dog> getCorrectDogsWithDateOfBirth(){
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog("Scrappy doo", "50.0 + 34.8", "50.0"));
-        dogs.add(new Dog("Droopy", "13.0", "50.0 + 28.3"));
-        dogs.add(new Dog("Spike", "60 oz.", "50.98"));
-        dogs.add(new Dog("Hachiko", "13.0", "35 in."));
+
+        dogs.add(new Dog("Droopy", 154.5, 178, "2014-06-23T13:00:00.000+0000"));
 
         return dogs;
     }
