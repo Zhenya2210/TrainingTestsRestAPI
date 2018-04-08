@@ -20,6 +20,8 @@ import static io.restassured.RestAssured.given;
 
 public class HelperTest {
 
+//    private static List<String> idCorrectDogs = new ArrayList<>();
+
     private HelperTest() {
     }
 
@@ -149,5 +151,24 @@ public class HelperTest {
         dogs.add(new Dog("Shaggy", 154.5, 178, "2014-06-23T13:00:00.670+0500"));
 
         return dogs;
+    }
+
+    public static List<String> getIdCorrectDogs(){
+
+        List<Dog> dogs = HelperTest.getCorrectDogs();
+        List<String> idCorrectDogs = new ArrayList<>();
+        for (int i = 0; i < dogs.size(); i++){
+
+            String idDog = given().
+                        contentType("application/json").
+                        body(dogs.get(i)).
+                    when().
+                        post().
+                    then().
+                        extract().path("id");
+
+            idCorrectDogs.add(idDog);
+        }
+        return idCorrectDogs;
     }
 }

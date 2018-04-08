@@ -206,32 +206,32 @@ public class TestingPostDogs {
 //
 //    }
 
-    public static List<DogSpecialCase> getDogsWithWrongOtherValues(){
+    private static List<DogSpecialCase> getDogsWithWrongOtherValues(){
         return HelperTest.getDogsWithWrongOtherValues();
     }
 
 
-    public static List<Dog> getCorrectDogs() {
+    private static List<Dog> getCorrectDogs() {
 
         return HelperTest.getCorrectDogs();
     }
 
-    public static List<Dog> getDogsWithIncorrectWeight() {
+    private static List<Dog> getDogsWithIncorrectWeight() {
 
         return HelperTest.getDogsWithIncorrectWeight();
     }
 
-    public static List<Dog> getDogsWithIncorrectHeight() {
+    private static List<Dog> getDogsWithIncorrectHeight() {
 
         return HelperTest.getDogsWithIncorrectHeight();
     }
 
-    public static List<Dog> getDogsWithIncorrectName(){
+    private static List<Dog> getDogsWithIncorrectName(){
 
        return HelperTest.getDogsWithIncorrectName();
     }
 
-    public static List<DogSpecialCase> getCorrectDogsSpecialCases(){
+    private static List<DogSpecialCase> getCorrectDogsSpecialCases(){
        return HelperTest.getCorrectDogsSpecialCases();
     }
 
