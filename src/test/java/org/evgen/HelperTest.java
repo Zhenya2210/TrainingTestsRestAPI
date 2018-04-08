@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -142,10 +143,10 @@ public class HelperTest {
         return dogs;
     }
 
-    public static List<Dog> getCorrectDogsWithDateOfBirth(){
+    public static List<Dog> getCorrectDogsWithDateOfBirth() throws ParseException {
         List<Dog> dogs = new ArrayList<>();
 
-        dogs.add(new Dog("Droopy", 154.5, 178, "2014-06-23T13:00:00.000+0000"));
+        dogs.add(new Dog("Shaggy", 154.5, 178, "2014-06-23T13:00:00.670+0500"));
 
         return dogs;
     }

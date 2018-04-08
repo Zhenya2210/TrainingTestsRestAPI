@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.text.ParseException;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -45,9 +46,9 @@ public class TestingPostDogs {
         String actualName = jsonPathNewDog.getString("name");
         double actualHeight = jsonPathNewDog.getDouble("height");
         double actualWeight = jsonPathNewDog.getDouble("weight");
-        String dateOfBirth = jsonPathNewDog.getString("timeOfBirth");
+        String timeOfBirth = jsonPathNewDog.getString("timeOfBirth");
 
-        assertNull(dateOfBirth, "Date of birth isn't null");
+        assertNull(timeOfBirth, "Date of birth isn't null");
         assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
         assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
         assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
@@ -72,9 +73,9 @@ public class TestingPostDogs {
         String actualName = jsonPathNewDog.getString("name");
         double actualHeight = jsonPathNewDog.getDouble("height");
         double actualWeight = jsonPathNewDog.getDouble("weight");
-        String dateOfBirth = jsonPathNewDog.getString("timeOfBirth");
+        String timeOfBirth = jsonPathNewDog.getString("timeOfBirth");
 
-        assertNull(dateOfBirth, "Date of birth isn't null");
+        assertNull(timeOfBirth, "Date of birth isn't null");
         assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
         assertEquals(Double.parseDouble(dog.getHeight()), actualHeight, "Height doesn't match the height you added earlier");
         assertEquals(Double.parseDouble(dog.getWeight()), actualWeight, "Weight doesn't match the weight you added earlier");
@@ -165,32 +166,45 @@ public class TestingPostDogs {
                     statusCode(400);
     }
 
-    @ParameterizedTest
-    @MethodSource("getCorrectDogsWithDateOfBirth")
-    public void createCorrectDogsWithDateOfBirth(Dog dog){
-
-        JsonPath jsonPathNewDog = given().
-                    contentType("application/json").
-                    body(dog).
-                when().
-                    post().
-                then().
-                    assertThat().
-                    statusCode(200).
-                extract().
-                    jsonPath();
-
-        String actualName = jsonPathNewDog.getString("name");
-        double actualHeight = jsonPathNewDog.getDouble("height");
-        double actualWeight = jsonPathNewDog.getDouble("weight");
-        String actualTimeOfBirth = jsonPathNewDog.getString("timeOfBirth");
-
-        assertEquals(dog.getTimeOfBirth(), actualTimeOfBirth);
-        assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
-        assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
-        assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
-
-    }
+//    @ParameterizedTest
+//    @MethodSource("getCorrectDogsWithDateOfBirth")
+//    public void createCorrectDogsWithDateOfBirth(Dog dog) throws ParseException {
+//
+//        JsonPath jsonPathNewDog = given().
+//                    contentType("application/json").
+//                    body(dog).
+//                when().
+//                    post().
+//                then().
+//                    assertThat().
+//                    statusCode(200).
+//                extract().
+//                    jsonPath();
+//
+//        String actualName = jsonPathNewDog.getString("name");
+//        double actualHeight = jsonPathNewDog.getDouble("height");
+//        double actualWeight = jsonPathNewDog.getDouble("weight");
+//        String actualTimeOfBirth = jsonPathNewDog.getString("timeOfBirth");
+//
+//        String expectedTimeOfBirth = dog.getTimeOfBirth();
+//
+//        String utc = expectedTimeOfBirth.substring(expectedTimeOfBirth.length() - 5, expectedTimeOfBirth.length()-2) + ":" + expectedTimeOfBirth.substring(expectedTimeOfBirth.length() - 2, expectedTimeOfBirth.length()) ;
+//
+////        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSXXXX");
+//
+//        LocalDateTime localDate = LocalDateTime.parse(expectedTimeOfBirth, DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSXXXX"));
+//        OffsetDateTime offsetDateTime = OffsetDateTime.of(localDate, offset);
+//        OffsetDateTime offsetDateTime1 =
+////        OffsetDateTime offsetDateTime2 = OffsetDateTime.of(offsetDateTime, ZoneOffset.of("+00:00"));
+//        System.out.println(offsetDateTime);
+//
+//
+//        assertEquals(dog.getTimeOfBirth(), actualTimeOfBirth);
+//        assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
+//        assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
+//        assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
+//
+//    }
 
     public static List<DogSpecialCase> getDogsWithWrongOtherValues(){
         return HelperTest.getDogsWithWrongOtherValues();
@@ -221,7 +235,7 @@ public class TestingPostDogs {
        return HelperTest.getCorrectDogsSpecialCases();
     }
 
-    public static List<Dog> getCorrectDogsWithDateOfBirth(){
+    public static List<Dog> getCorrectDogsWithDateOfBirth() throws ParseException {
         return HelperTest.getCorrectDogsWithDateOfBirth();
     }
 }
