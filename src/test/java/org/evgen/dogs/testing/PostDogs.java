@@ -1,8 +1,10 @@
 package org.evgen.dogs.testing;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.config.JsonPathConfig;
+import org.apache.http.HttpStatus;
 import org.evgen.HelperTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Testing application github: https://github.com/timazet/java-course
  */
-public class TestingPostDogs {
+public class PostDogs {
 
 
     @BeforeAll
@@ -33,13 +35,13 @@ public class TestingPostDogs {
     public void crateNewCorrectDog(Dog dog){
 
         JsonPath jsonPathNewDog = given().
-                    contentType("application/json").
+                    contentType(ContentType.JSON).
                     body(dog).
                 when().
                     post().
                 then().
                     assertThat().
-                    statusCode(200).
+                    statusCode(HttpStatus.SC_OK).
                 extract().
                     jsonPath();
 
@@ -60,13 +62,13 @@ public class TestingPostDogs {
     public void crateNewCorrectDogSpecialCase(DogSpecialCase dog){
 
         JsonPath jsonPathNewDog = given().
-                    contentType("application/json").
+                    contentType(ContentType.JSON).
                     body(dog).
                 when().
                     post().
                 then().
                     assertThat().
-                    statusCode(200).
+                    statusCode(HttpStatus.SC_OK).
                 extract().
                     jsonPath();
 
@@ -88,13 +90,13 @@ public class TestingPostDogs {
     public void errorCodeNotBlankSized(Dog dog){
 
         JsonPath jsonPathDog = given().
-                contentType("application/json").
+                contentType(ContentType.JSON).
                 body(dog).
             when().
                 post().
             then().
                 assertThat().
-                statusCode(400).
+                statusCode(HttpStatus.SC_BAD_REQUEST).
             extract().
                 jsonPath();
 
@@ -112,13 +114,13 @@ public class TestingPostDogs {
     public void dogsWithIncorrectWeight(Dog dog){
 
         JsonPath jsonPath = given().
-                                contentType("application/json").
+                                contentType(ContentType.JSON).
                                 body(dog).
                             when().
                                 post().
                             then().
                                 assertThat().
-                                statusCode(400).
+                                statusCode(HttpStatus.SC_BAD_REQUEST).
                             extract().
                                 jsonPath();
 
@@ -135,13 +137,13 @@ public class TestingPostDogs {
     public void dogsWithIncorrectHeight(Dog dog){
 
         JsonPath jsonPath = given().
-                contentType("application/json").
+                contentType(ContentType.JSON).
                     body(dog).
                 when().
                     post().
                 then().
                     assertThat().
-                    statusCode(400).
+                    statusCode(HttpStatus.SC_BAD_REQUEST).
                 extract().
                     jsonPath();
 
@@ -157,13 +159,13 @@ public class TestingPostDogs {
     @MethodSource("getDogsWithWrongOtherValues")
     public void createDogsWithWrongOtherValues(DogSpecialCase dog){
         given().
-                    contentType("application/json").
+                    contentType(ContentType.JSON).
                     body(dog).
                 when().
                     post().
                 then().
                     assertThat().
-                    statusCode(400);
+                    statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
 //    @ParameterizedTest

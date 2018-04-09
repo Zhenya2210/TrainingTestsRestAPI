@@ -11,6 +11,9 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
+/**
+ * Testing application github: https://github.com/timazet/java-course
+ */
 public class DeleteDogs {
 
     @BeforeAll

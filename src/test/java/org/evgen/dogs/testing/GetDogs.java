@@ -14,6 +14,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasKey;
 
+/**
+ * Testing application github: https://github.com/timazet/java-course
+ */
 public class GetDogs {
 
     @BeforeAll
