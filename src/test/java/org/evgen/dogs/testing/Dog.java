@@ -3,10 +3,10 @@ package org.evgen.dogs.testing;
 
 public class Dog {
 
-    String name;
-    double weight;
-    double height;
-    String timeOfBirth;
+    private String name;
+    private double weight;
+    private double height;
+    private String timeOfBirth;
 
 
     public Dog(String name, double weight, double height) {

@@ -2,10 +2,10 @@ package org.evgen.dogs.testing;
 
 public class DogSpecialCase {
 
-    String name;
-    String weight;
-    String height;
-    String timeOfBirth;
+    private String name;
+    private String weight;
+    private String height;
+    private String timeOfBirth;
 
     public DogSpecialCase(String name, String weight, String height) {
         this.name = name;
