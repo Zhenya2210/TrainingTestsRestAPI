@@ -146,10 +146,48 @@ public class HelperTest {
         return dogs;
     }
 
-    public static List<Dog> getCorrectDogsWithDateOfBirth() throws ParseException {
+    public static List<Dog> getDogsWithCorrectDateOfBirth() throws ParseException {
         List<Dog> dogs = new ArrayList<>();
 
-        dogs.add(new Dog("Shaggy", 154.5, 178, "0714-06-23T13:00:00.670+0500"));
+        dogs.add(new Dog("Rex1", 154.5, 178, "2014-06-23T12:34:56.789+1800"));
+        dogs.add(new Dog("Rex2", 154.5, 178, "2014-06-23T12:34:56.789-1800"));
+        dogs.add(new Dog("Rex3", 154.5, 178, "2014-06-23T12:34:56.789+1759"));
+        dogs.add(new Dog("Rex4", 154.5, 178, "2014-06-23T12:34:56.789-1759"));
+        dogs.add(new Dog("Rex5", 154.5, 178, "2014-06-23T12:34:56.789-1759"));
+        dogs.add(new Dog("Rex6", 154.5, 178, "2014-06-23T12:34:56.789+0000"));
+        dogs.add(new Dog("Rex7", 154.5, 178, "2014-06-23T12:34:56.789-0000"));
+        dogs.add(new Dog("Rex8", 154.5, 178, "2014-06-23T23:59:59.789+0800"));
+        dogs.add(new Dog("Rex9", 154.5, 178, "0862-01-01T12:34:56.789-0300"));
+
+        dogs.add(new Dog("Baron", 154.5, 178, "2014-06-23T12:34:56.07+0830"));
+
+        return dogs;
+    }
+
+    public static List<Dog> getDogsWithIncorrectDateOfBirth(){
+
+        List<Dog> dogs = new ArrayList<>();
+
+        dogs.add(new Dog("Baron1", 154.5, 178, "2014-06-23T12:34:56.789+1801"));
+        dogs.add(new Dog("Baron2", 154.5, 178, "2014-06-23T12:34:56.789-1801"));
+        dogs.add(new Dog("Baron3", 154.5, 178, "2014-06-23T25:34:56.789+0830"));
+        dogs.add(new Dog("Baron4", 154.5, 178, "2014-06-23T26:34:56.789+0830"));
+        dogs.add(new Dog("Baron5", 154.5, 178, "2014-06-23T12:60:56.789+0830"));
+        dogs.add(new Dog("Baron6", 154.5, 178, "2014-06-23T12:61:56.789+0830"));
+        dogs.add(new Dog("Baron7", 154.5, 178, "2014-06-23T12:34:60.789+0830"));
+        dogs.add(new Dog("Baron8", 154.5, 178, "2014-06-23T12:34:61.789+0830"));
+        dogs.add(new Dog("Baron9", 154.5, 178, "2014-06-23T12:34:56.7899+0830"));
+        dogs.add(new Dog("Baron10", 154.5, 178, "2014-06-23T12:34:56.789+00830"));
+        dogs.add(new Dog("Baron11", 154.5, 178, "2014-06-23T12:34:56.789+08300"));
+        dogs.add(new Dog("Baron12", 154.5, 178, "2014-06-23T12:34:56.7+0830"));
+        dogs.add(new Dog("Baron13", 154.5, 178, "2014-06-32T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron14", 154.5, 178, "2014-06-00T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron15", 154.5, 178, "2014-13-03T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron16", 154.5, 178, "2014-00-22T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron17", 154.5, 178, "2014-09-3T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron18", 154.5, 178, "14-09-03T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron19", 154.5, 178, "2014-9-03T12:34:56.007+0830"));
+        dogs.add(new Dog("Baron20", 154.5, 178, "2014-09-03T12:34:56.007+08:30"));
 
         return dogs;
     }

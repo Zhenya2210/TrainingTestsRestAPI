@@ -27,7 +27,6 @@ public class PostDogs {
     public static void setUP(){
         RestAssured.baseURI = "http://localhost:8085/dog/";
         RestAssured.config = RestAssured.config().jsonConfig(jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
-
     }
 
     @ParameterizedTest
@@ -169,8 +168,8 @@ public class PostDogs {
     }
 
     @ParameterizedTest
-    @MethodSource("getCorrectDogsWithDateOfBirth")
-    public void createCorrectDogsWithDateOfBirth(Dog dog) throws ParseException {
+    @MethodSource("getDogsWithCorrectDateOfBirth")
+    public void createDogsWithCorrectDateOfBirth(Dog dog) throws ParseException {
 
         JsonPath jsonPathNewDog = given().
                     contentType("application/json").
@@ -195,6 +194,21 @@ public class PostDogs {
         assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
 
     }
+
+    @ParameterizedTest
+    @MethodSource("getDogsWithIncorrectDateOfBirth")
+    public void createDogsWithIncorrectDateOfBirth(Dog dog){
+
+        given().
+                contentType(ContentType.JSON).
+                body(dog).
+            when().
+                post().
+            then().
+                assertThat().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
 
     private static List<DogSpecialCase> getDogsWithWrongOtherValues(){
         return HelperTest.getDogsWithWrongOtherValues();
@@ -225,7 +239,12 @@ public class PostDogs {
        return HelperTest.getCorrectDogsSpecialCases();
     }
 
-    public static List<Dog> getCorrectDogsWithDateOfBirth() throws ParseException {
-        return HelperTest.getCorrectDogsWithDateOfBirth();
+    private static List<Dog> getDogsWithCorrectDateOfBirth() throws ParseException {
+        return HelperTest.getDogsWithCorrectDateOfBirth();
     }
+
+    private static List<Dog> getDogsWithIncorrectDateOfBirth(){
+        return HelperTest.getDogsWithIncorrectDateOfBirth();
+    }
+
 }
