@@ -168,45 +168,33 @@ public class PostDogs {
                     statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
-//    @ParameterizedTest
-//    @MethodSource("getCorrectDogsWithDateOfBirth")
-//    public void createCorrectDogsWithDateOfBirth(Dog dog) throws ParseException {
-//
-//        JsonPath jsonPathNewDog = given().
-//                    contentType("application/json").
-//                    body(dog).
-//                when().
-//                    post().
-//                then().
-//                    assertThat().
-//                    statusCode(200).
-//                extract().
-//                    jsonPath();
-//
-//        String actualName = jsonPathNewDog.getString("name");
-//        double actualHeight = jsonPathNewDog.getDouble("height");
-//        double actualWeight = jsonPathNewDog.getDouble("weight");
-//        String actualTimeOfBirth = jsonPathNewDog.getString("timeOfBirth");
-//
-//        String expectedTimeOfBirth = dog.getTimeOfBirth();
-//
-//        String utc = expectedTimeOfBirth.substring(expectedTimeOfBirth.length() - 5, expectedTimeOfBirth.length()-2) + ":" + expectedTimeOfBirth.substring(expectedTimeOfBirth.length() - 2, expectedTimeOfBirth.length()) ;
-//
-////        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSXXXX");
-//
-//        LocalDateTime localDate = LocalDateTime.parse(expectedTimeOfBirth, DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSXXXX"));
-//        OffsetDateTime offsetDateTime = OffsetDateTime.of(localDate, offset);
-//        OffsetDateTime offsetDateTime1 =
-////        OffsetDateTime offsetDateTime2 = OffsetDateTime.of(offsetDateTime, ZoneOffset.of("+00:00"));
-//        System.out.println(offsetDateTime);
-//
-//
-//        assertEquals(dog.getTimeOfBirth(), actualTimeOfBirth);
-//        assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
-//        assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
-//        assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
-//
-//    }
+    @ParameterizedTest
+    @MethodSource("getCorrectDogsWithDateOfBirth")
+    public void createCorrectDogsWithDateOfBirth(Dog dog) throws ParseException {
+
+        JsonPath jsonPathNewDog = given().
+                    contentType("application/json").
+                    body(dog).
+                when().
+                    post().
+                then().
+                    assertThat().
+                    statusCode(200).
+                extract().
+                    jsonPath();
+
+        String actualName = jsonPathNewDog.getString("name");
+        double actualHeight = jsonPathNewDog.getDouble("height");
+        double actualWeight = jsonPathNewDog.getDouble("weight");
+        String actualTimeOfBirth = jsonPathNewDog.getString("timeOfBirth");
+        String expectedTimeOfBirth = HelperTest.getTimeOfBirthWithZeroTimeZone(dog.getTimeOfBirth());
+
+        assertEquals(expectedTimeOfBirth, actualTimeOfBirth);
+        assertEquals(dog.getName(), actualName, "The name doesn't match the name you added earlier");
+        assertEquals(dog.getHeight(), actualHeight, "Height doesn't match the height you added earlier");
+        assertEquals(dog.getWeight(), actualWeight, "Weight doesn't match the weight you added earlier");
+
+    }
 
     private static List<DogSpecialCase> getDogsWithWrongOtherValues(){
         return HelperTest.getDogsWithWrongOtherValues();

@@ -10,6 +10,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -146,7 +149,7 @@ public class HelperTest {
     public static List<Dog> getCorrectDogsWithDateOfBirth() throws ParseException {
         List<Dog> dogs = new ArrayList<>();
 
-        dogs.add(new Dog("Shaggy", 154.5, 178, "2014-06-23T13:00:00.670+0500"));
+        dogs.add(new Dog("Shaggy", 154.5, 178, "0714-06-23T13:00:00.670+0500"));
 
         return dogs;
     }
@@ -168,5 +171,16 @@ public class HelperTest {
             idCorrectDogs.add(idDog);
         }
         return idCorrectDogs;
+    }
+
+    public static String getTimeOfBirthWithZeroTimeZone(String dogTimeOfBrith){
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSXXXX");
+        ZonedDateTime fromIsoDate = ZonedDateTime.parse(dogTimeOfBrith, dateTimeFormatter);
+        ZoneOffset offset = ZoneOffset.of("+00:00");
+        ZonedDateTime acst = fromIsoDate.withZoneSameInstant(offset);
+        dogTimeOfBrith = acst.format(dateTimeFormatter);
+
+        return dogTimeOfBrith;
     }
 }
