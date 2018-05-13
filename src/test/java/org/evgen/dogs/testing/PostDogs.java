@@ -178,7 +178,7 @@ public class PostDogs {
                     post().
                 then().
                     assertThat().
-                    statusCode(200).
+                    statusCode(HttpStatus.SC_OK).
                 extract().
                     jsonPath();
 

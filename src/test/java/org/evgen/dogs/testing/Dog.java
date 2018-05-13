@@ -23,17 +23,6 @@ public class Dog {
         this.timeOfBirth = timeOfBirth;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
 
     public String getName() {
 
@@ -46,10 +35,6 @@ public class Dog {
 
     public double getHeight() {
         return height;
-    }
-
-    public void setTimeOfBirth(String timeOfBirth) {
-        this.timeOfBirth = timeOfBirth;
     }
 
     public String getTimeOfBirth() {
